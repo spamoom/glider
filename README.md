@@ -19,7 +19,7 @@ This should be the root of the JSON tree.
     },
     "debug": false,
     "home": {
-        // A widget to use as the app's first page, probably a Scaffold.
+        "type": "scaffold"
     }
 }
 ```
@@ -29,24 +29,12 @@ This should be the root of the JSON tree.
 ```json
 {
     "type": "scaffold",
-    "app_bar": {
-        // An app bar widget
-    },
-    "body": {
-        // Any widget to be used as the page contents
-    },
-    "fab": {
-        // A Floating Action Button
-    },
-    "drawer": {
-        // A navigation drawer
-    },
-    "bottom_bar": {
-        // A bottom navigation bar or bottom app bar
-    },
-    "bottom_sheet": {
-        // A persistent bottom sheet
-    }
+    "app_bar": {},
+    "body": {},
+    "fab": {},
+    "drawer": {},
+    "bottom_bar": {},
+    "bottom_sheet": {}
 }
 ```
 
@@ -64,10 +52,8 @@ This should be the root of the JSON tree.
 ```json
 {
     "type": "aspect_ratio",
-    "aspect_ratio": 1.7, // Represents a 16:9 ratio
-    "child": {
-        // An arbitrary widget constrained by the aspect ratio
-    }
+    "aspect_ratio": 1.7,
+    "child": {}
 }
 ```
 
@@ -76,9 +62,7 @@ This should be the root of the JSON tree.
 ```json
 {
     "type": "button_bar",
-    "buttons": [
-        // List of Button widgets
-    ]
+    "buttons": []
 }
 ```
 
@@ -87,9 +71,7 @@ This should be the root of the JSON tree.
 ```json
 {
     "type": "card",
-    "child": {
-        // An arbitrary widget
-    },
+    "child": {},
     "elevation": 1.0
 }
 ```
@@ -99,9 +81,7 @@ This should be the root of the JSON tree.
 ```json
 {
     "type": "center",
-    "child": {
-        // An arbitrary widget
-    }
+    "child": {}
 }
 ```
 
@@ -118,9 +98,7 @@ This should be the root of the JSON tree.
 ```json
 {
     "type": "column",
-    "children": [
-        // A list of widgets
-    ]
+    "children": []
 }
 ```
 
@@ -137,9 +115,7 @@ This should be the root of the JSON tree.
 ```json
 {
     "type": "drawer",
-    "child": {
-        // An arbitrary widget, probably a ListView
-    }
+    "child": {}
 }
 ```
 
@@ -149,9 +125,9 @@ This should be the root of the JSON tree.
 {
     "type": "fab",
     "label": "New Alarm",
-    "icon": "alarm", // The name of a Material or FontAwesome icon
+    "icon": "alarm",
     "destination": {
-        // A Scaffold widget which will be navigated to when the FAB is clicked
+        "type": "scaffold"
     }
 }
 ```
@@ -162,9 +138,7 @@ This should be the root of the JSON tree.
 {
     "type": "hero",
     "tag": "a-tag",
-    "child": {
-        // A widget
-    }
+    "child": {}
 }
 ```
 
@@ -173,7 +147,7 @@ This should be the root of the JSON tree.
 ```json
 {
     "type": "icon",
-    "icon": "person" // The name of a Material or FontAwesome icon
+    "icon": "person"
 }
 ```
 
@@ -201,14 +175,10 @@ This should be the root of the JSON tree.
     "type": "list_tile",
     "title": "John Smith",
     "subtitle": "john@smith.com",
-    "leading": {
-        // A widget
-    },
-    "trailing": {
-        // A widget
-    },
+    "leading": {},
+    "trailing": {},
     "destination": {
-        // A Scaffold widget which will be navigated to when the ListTile is tapped
+        "type": "scaffold"
     }
 }
 ```
@@ -218,9 +188,7 @@ This should be the root of the JSON tree.
 ```json
 {
     "type": "list_view",
-    "children": [
-        // A list of widgets
-    ]
+    "children": []
 }
 ```
 
@@ -229,7 +197,7 @@ This should be the root of the JSON tree.
 ```json
 {
     "type": "padding",
-    "padding": 16.0, // Sets padding for all sides
+    "padding": 16.0,
     "padding_vertical": 8.0,
     "padding_horizontal": 4.0,
     "padding_left": 4.0,
@@ -250,9 +218,7 @@ You must specify either:
 ```json
 {
     "type": "row",
-    "children": [
-        // A list of widgets
-    ]
+    "children": []
 }
 ```
 
@@ -261,9 +227,18 @@ You must specify either:
 ```json
 {
     "type": "tooltip",
-    "child": {
-        // The widget to wrap with the tooltip
-    },
+    "child": {},
     "message": "A tooltip"
+}
+```
+
+### URL
+
+Gets a widget definition from the specified URL
+
+```json
+{
+    "type": "url",
+    "url": "https://athing.com/thing.json"
 }
 ```
