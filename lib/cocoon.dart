@@ -11,20 +11,25 @@ class Cocoon extends StatelessWidget {
 
   Cocoon(this._json, {Key key}) : super(key: key);
 
-  static Widget fromUrl(String url) {
+  static Widget fromUrl(String url, {String fallback}) {
     return FutureBuilder(
       future: get(url),
       builder: (context, AsyncSnapshot<Response> snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data.statusCode == 200) {
             return Cocoon(jsonDecode(snapshot.data.body));
+          } else if (fallback != null) {
+            return Cocoon(jsonDecode(fallback));
           } else {
-            return Center(
-              child: Text(
-                snapshot.hasError
-                    ? snapshot.error.toString()
-                    : 'An error occurred',
+            return MaterialApp(
+              home: Center(
+                child: Text(
+                  snapshot.hasError
+                      ? snapshot.error.toString()
+                      : 'An error occurred',
+                ),
               ),
+              title: "Cocoon App",
             );
           }
         } else {
