@@ -213,6 +213,17 @@ You must specify either:
 * `padding_vertical` and `padding_horizontal`
 * `padding_left`, `padding_right`, `padding_top`, and `padding_bottom`
 
+### Sized Box
+
+```json
+{
+    "type": "sized_box",
+    "height": 16.0,
+    "width": null,
+    "child": {}
+}
+```
+
 ### Row
 
 ```json
