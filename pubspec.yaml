@@ -11,24 +11,21 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.12.0
-  font_awesome_flutter: ^8.2.0
   icons_helper:
     git:
       url: git://github.com/sjmcdowall/icons_helper
 
+
 dev_dependencies:
-  flutter_driver:
-    sdk: flutter
   flutter_test:
     sdk: flutter
-  test: ^1.5.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-  uses-material-design: true
+
   # To add assets to your package, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg
@@ -39,6 +36,7 @@ flutter:
   #
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
+
   # To add custom fonts to your package, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
