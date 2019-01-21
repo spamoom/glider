@@ -34,5 +34,5 @@ final String _testJson = '''
 ''';
 
 void main() {
-  runApp(Cocoon(jsonDecode(_testJson)));
+  runApp(Cocoon.fromUrl("http://b7c570cb.ngrok.io/api/layouts/home"));
 }
