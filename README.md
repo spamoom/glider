@@ -7,7 +7,7 @@ To get started with Cocoon add the following to your pubspec.yaml file
 
 ```yaml
 cocoon:
-    git: ../cocoon/
+    git:
         url: git://github.com/netsells/cocoon.git
 ```
 
