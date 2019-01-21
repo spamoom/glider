@@ -40,7 +40,7 @@ class Cocoon extends StatelessWidget {
     final String type = _json['type'];
     switch (type) {
       case 'url':
-        return Cocoon(_json['url']);
+        return Cocoon.fromUrl(_json['url']);
       case 'app':
         return _buildApp(context, _json);
       case 'scaffold':
