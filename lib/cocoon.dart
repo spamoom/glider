@@ -68,6 +68,8 @@ class Cocoon extends StatelessWidget {
         return _buildFab(context, _json);
       case 'hero':
         return _buildHero(context, _json);
+      case 'icon':
+        return _buildIcon(context, _json['icon']);
       case 'image':
         return _buildImage(context, _json);
       case 'linear_progress':
