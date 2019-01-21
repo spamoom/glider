@@ -73,6 +73,8 @@ class Cocoon extends StatelessWidget {
         return _buildFab(context, _json);
       case 'hero':
         return _buildHero(context, _json);
+      case 'icon':
+        return _buildIcon(context, _json['icon']);
       case 'image':
         return _buildImage(context, _json);
       case 'linear_progress':
@@ -83,6 +85,8 @@ class Cocoon extends StatelessWidget {
         return _buildListView(context, _json);
       case 'padding':
         return _buildPadding(context, _json);
+      case 'sized_box':
+        return _buildSizedBox(context, _json);
       case 'row':
         return _buildRow(context, _json);
       case 'tooltip':
@@ -339,6 +343,17 @@ class Cocoon extends StatelessWidget {
         childrenJson.map((child) => Cocoon(child)).toList();
     return Row(
       children: children,
+    );
+  }
+
+  static SizedBox _buildSizedBox(
+    BuildContext context,
+    Map<String, dynamic> json,
+  ) {
+    return SizedBox(
+      width: json['width'],
+      height: json['height'],
+      child: json['child'] != null ? Cocoon(json['child']) : null,
     );
   }
 
