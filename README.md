@@ -302,6 +302,15 @@ You must specify either:
 }
 ```
 
+### Text
+
+```json
+{
+    "type": "text",
+    "text": "Hello"
+}
+```
+
 ### Tooltip
 
 ```json
