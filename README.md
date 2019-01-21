@@ -245,7 +245,7 @@ You must specify either:
 
 ### URL
 
-Gets a widget definition from the specified URL
+Gets a widget definition from the specified URL. Designed for use with Scaffolds.
 
 ```json
 {

@@ -11,7 +11,7 @@ class Cocoon extends StatelessWidget {
 
   Cocoon(this._json, {Key key}) : super(key: key);
 
-  static Widget fromUrl(String url) {
+  static Widget appFromUrl(String url) {
     return FutureBuilder(
       future: get(url),
       builder: (context, AsyncSnapshot<Response> snapshot) {
@@ -36,12 +36,46 @@ class Cocoon extends StatelessWidget {
     );
   }
 
+  static Widget _fromUrl(String url) {
+    return FutureBuilder(
+      future: get(url),
+      builder: (context, AsyncSnapshot<Response> snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data.statusCode == 200) {
+            final json = jsonDecode(snapshot.data.body);
+            if (json['type'] != 'scaffold') {
+              throw Exception(
+                  "Only Scaffold widgets can be retrieved from URLs");
+            }
+            return Cocoon(json);
+          } else {
+            return Scaffold(
+              body: Center(
+                child: Text(
+                  snapshot.hasError
+                      ? snapshot.error.toString()
+                      : 'An error occurred',
+                ),
+              ),
+            );
+          }
+        } else {
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final String type = _json['type'];
     switch (type) {
       case 'url':
-        return Cocoon.fromUrl(_json['url']);
+        return Cocoon._fromUrl(_json['url']);
       case 'app':
         return _buildApp(context, _json);
       case 'scaffold':
