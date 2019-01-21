@@ -47,8 +47,40 @@ class Cocoon extends StatelessWidget {
         return _buildScaffold(context, _json);
       case 'app_bar':
         return _buildAppBar(context, _json);
+      case 'aspect_ratio':
+        return _buildAspectRatio(context, _json);
+      case 'button_bar':
+        return _buildButtonBar(context, _json);
+      case 'card':
+        return _buildCard(context, _json);
+      case 'center':
+        return _buildCenter(context, _json);
+      case 'circular_progress':
+        return _buildCircularProgressIndicator(context, _json);
+      case 'column':
+        return _buildColumn(context, _json);
+      case 'divider':
+        return _buildDivider(context, _json);
+      case 'drawer':
+        return _buildDrawer(context, _json);
       case 'fab':
         return _buildFab(context, _json);
+      case 'hero':
+        return _buildHero(context, _json);
+      case 'image':
+        return _buildImage(context, _json);
+      case 'linear_progress':
+        return _buildLinearProgressIndiator(context, _json);
+      case 'list_tile':
+        return _buildListTile(context, _json);
+      case 'list_view':
+        return _buildListView(context, _json);
+      case 'padding':
+        return _buildPadding(context, _json);
+      case 'row':
+        return _buildRow(context, _json);
+      case 'tooltip':
+        return _buildTooltip(context, _json);
       default:
         return Center();
     }
@@ -92,6 +124,93 @@ class Cocoon extends StatelessWidget {
     );
   }
 
+  static AspectRatio _buildAspectRatio(
+    BuildContext context,
+    Map<String, dynamic> json,
+  ) {
+    return AspectRatio(
+      aspectRatio: json['aspect_ratio'],
+      child: Cocoon(json['child']),
+    );
+  }
+
+  // TODO Bottom navigation bar
+
+  static ButtonBar _buildButtonBar(
+    BuildContext context,
+    Map<String, dynamic> json,
+  ) {
+    final List<dynamic> buttonsJson = json['buttons'];
+    final List<Widget> buttons =
+        buttonsJson.map((button) => Cocoon(button)).toList();
+    return ButtonBar(
+      children: buttons,
+    );
+  }
+
+  static Card _buildCard(
+    BuildContext context,
+    Map<String, dynamic> json,
+  ) {
+    return Card(
+      child: Cocoon(json['child']),
+      color: _colorFromHex(json['color']),
+      elevation: json['elevation'] ?? 1.0,
+    );
+  }
+
+  static Center _buildCenter(
+    BuildContext context,
+    Map<String, dynamic> json,
+  ) {
+    return Center(
+      child: Cocoon(json['child']),
+    );
+  }
+
+  // TODO Checkbox
+
+  // TODO Chip
+
+  static CircularProgressIndicator _buildCircularProgressIndicator(
+    BuildContext context,
+    Map<String, dynamic> json,
+  ) {
+    return CircularProgressIndicator();
+  }
+
+  static Column _buildColumn(
+    BuildContext context,
+    Map<String, dynamic> json,
+  ) {
+    final List<dynamic> childrenJson = json['children'];
+    final List<Widget> children =
+        childrenJson.map((child) => Cocoon(child)).toList();
+    return Column(
+      children: children,
+    );
+  }
+
+  static Divider _buildDivider(
+    BuildContext context,
+    Map<String, dynamic> json,
+  ) {
+    return Divider(
+      indent: json['indent'],
+    );
+  }
+
+  static Drawer _buildDrawer(
+    BuildContext context,
+    Map<String, dynamic> json,
+  ) {
+    return Drawer(child: Cocoon(json['child']));
+  }
+
+  // TODO Dropdown button
+
+  // TODO Flat button
+
   static FloatingActionButton _buildFab(
     BuildContext context,
     Map<String, dynamic> json,
@@ -113,9 +232,120 @@ class Cocoon extends StatelessWidget {
           );
   }
 
+  // TODO Form
+
+  // TODO FormField
+
+  // TODO GridView
+
+  static Hero _buildHero(
+    BuildContext context,
+    Map<String, dynamic> json,
+  ) {
+    return Hero(
+      tag: json['tag'],
+      child: Cocoon(json['child']),
+    );
+  }
+
   static Icon _buildIcon(BuildContext context, String icon) {
     return Icon(getMaterialIcon(name: icon));
   }
+
+  // TODO IconButton
+
+  static Image _buildImage(BuildContext context, Map<String, dynamic> json) {
+    return Image.network(json['src']);
+  }
+
+  static LinearProgressIndicator _buildLinearProgressIndiator(
+    BuildContext context,
+    Map<String, dynamic> json,
+  ) {
+    return LinearProgressIndicator();
+  }
+
+  static ListTile _buildListTile(
+    BuildContext context,
+    Map<String, dynamic> json,
+  ) {
+    final Function onTap = () {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => Cocoon(json['destination']),
+      ));
+    };
+    return ListTile(
+      title: json['title'] != null ? Text(json['title']) : null,
+      subtitle: json['subtitle'] != null ? Text(json['subtitle']) : null,
+      leading: json['leading'] != null ? Cocoon(json['leading']) : null,
+      trailing: json['trailing'] != null ? Cocoon(json['trailing']) : null,
+      onTap: json['destination'] != null ? onTap : null,
+    );
+  }
+
+  static ListView _buildListView(
+    BuildContext context,
+    Map<String, dynamic> json,
+  ) {
+    final List<dynamic> childrenJson = json['children'];
+    final List<Widget> children =
+        childrenJson.map((child) => Cocoon(child)).toList();
+    return ListView(children: children);
+  }
+
+  static Padding _buildPadding(
+    BuildContext context,
+    Map<String, dynamic> json,
+  ) {
+    return Padding(
+        child: Cocoon(json['child']),
+        padding: json['padding'] != null
+            ? EdgeInsets.all(json['padding'])
+            : json['padding_vertical'] != null &&
+                    json['padding_horizontal'] != null
+                ? EdgeInsets.symmetric(
+                    vertical: json['padding_vertical'],
+                    horizontal: json['padding_horizontal'],
+                  )
+                : EdgeInsets.fromLTRB(
+                    json['padding_left'],
+                    json['padding_top'],
+                    json['padding_right'],
+                    json['padding_bottom'],
+                  ));
+  }
+
+  // TODO PopupMenuButton
+
+  // TODO Radio
+
+  // TODO RaisedButton
+
+  // TODO RefreshIndicator
+
+  static Row _buildRow(
+    BuildContext context,
+    Map<String, dynamic> json,
+  ) {
+    final List<dynamic> childrenJson = json['children'];
+    final List<Widget> children =
+        childrenJson.map((child) => Cocoon(child)).toList();
+    return Row(
+      children: children,
+    );
+  }
+
+  // TODO Slider
+
+  // TODO SnackBar
+
+  // TODO Switch
+
+  // TODO TabBar
+
+  // TODO TabBarView
+
+  // TODO TextField
 
   static ThemeData _buildTheme(
     BuildContext context,
@@ -128,8 +358,21 @@ class Cocoon extends StatelessWidget {
     );
   }
 
+  static Tooltip _buildTooltip(
+    BuildContext context,
+    Map<String, dynamic> json,
+  ) {
+    return Tooltip(
+      child: Cocoon(json['child']),
+      message: json['message'],
+    );
+  }
+
   static Color _colorFromHex(String hex) {
-    return Color(int.parse(hex.replaceAll('#', ''), radix: 16))
-        .withOpacity(1.0);
+    if (hex != null && hex.isNotEmpty) {
+      return Color(int.parse(hex.replaceAll('#', ''), radix: 16))
+          .withOpacity(1.0);
+    } else
+      return null;
   }
 }
