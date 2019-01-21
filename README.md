@@ -2,6 +2,32 @@
 
 Create a Flutter app based on a JSON API
 
+## Installation
+To get started with Cocoon add the following to your pubspec.yaml file
+
+```yaml
+cocoon:
+    git: ../cocoon/
+        url: git://github.com/netsells/cocoon.git
+```
+
+Replace your main.dart file with the following:
+
+```dart
+import 'package:cocoon/cocoon.dart';
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(Cocoon.fromUrl(
+      "{Your Cocoon API URL}",
+      fallback: {Your Fallback JSON}));
+}
+```
+
+### Fallback JSON
+Should the user open your app offline or the network request fails, you can pass in fallback JSON which could be an API response
+which has been stored and bundled with the app.
+
 ## Supported Widgets
 
 ### App
