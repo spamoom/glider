@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(Cocoon.fromUrl(
       "{Your Cocoon API URL}",
-      fallback: {Your Fallback JSON}));
+      fallback: "{Your Fallback JSON}"));
 }
 ```
 
