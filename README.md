@@ -67,6 +67,40 @@ This should be the root of the JSON tree.
 }
 ```
 
+### Bottom Navigation Scaffold
+
+```json
+{
+    "type": "bottom_nav_scaffold",
+    "app_bar": {},
+    "fab": {},
+    "items": [
+      {
+        "icon": "alarm",
+        "title": "Alarms",
+        "body": {
+          "type": "center",
+          "child": {
+            "type": "text",
+            "text": "Alarms"
+          }
+        }
+      },
+      {
+        "icon": "person",
+        "title": "Profile",
+        "body": {
+          "type": "center",
+          "child": {
+            "type": "text",
+            "text": "Profile"
+          }
+        }
+      }
+    ]
+}
+```
+
 ### App Bar
 
 ```json

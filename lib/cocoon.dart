@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:icons_helper/icons_helper.dart';
+import 'bottom_nav_scaffold.dart';
 
 class Cocoon extends StatelessWidget {
   final Map<String, dynamic> _json;
@@ -77,6 +78,7 @@ class Cocoon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(_json);
     final String type = _json['type'];
     switch (type) {
       case 'url':
@@ -85,6 +87,8 @@ class Cocoon extends StatelessWidget {
         return _buildApp(context, _json);
       case 'scaffold':
         return _buildScaffold(context, _json);
+      case 'bottom_nav_scaffold':
+        return _buildBottomNavScaffold(context, _json);
       case 'app_bar':
         return _buildAppBar(context, _json);
       case 'aspect_ratio':
@@ -123,6 +127,8 @@ class Cocoon extends StatelessWidget {
         return _buildSizedBox(context, _json);
       case 'row':
         return _buildRow(context, _json);
+      case 'text':
+        return _buildText(context, _json);
       case 'tooltip':
         return _buildTooltip(context, _json);
       default:
@@ -158,6 +164,13 @@ class Cocoon extends StatelessWidget {
       bottomSheet:
           json['bottom_sheet'] != null ? Cocoon(json['bottom_sheet']) : null,
     );
+  }
+
+  static BottomNavScaffold _buildBottomNavScaffold(
+    BuildContext context,
+    Map<String, dynamic> json,
+  ) {
+    return BottomNavScaffold(json);
   }
 
   static AppBar _buildAppBar(
@@ -209,7 +222,7 @@ class Cocoon extends StatelessWidget {
     Map<String, dynamic> json,
   ) {
     return Center(
-      child: Cocoon(json['child']),
+      child: json['child'] != null ? Cocoon(json['child']) : null,
     );
   }
 
@@ -412,6 +425,13 @@ class Cocoon extends StatelessWidget {
       accentColor: _colorFromHex(json['accent_color']),
       brightness: json['dark'] == true ? Brightness.dark : Brightness.light,
     );
+  }
+
+  static Text _buildText(
+    BuildContext context,
+    Map<String, dynamic> json,
+  ) {
+    return Text(json['text']);
   }
 
   static Tooltip _buildTooltip(
