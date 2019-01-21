@@ -1,9 +1,10 @@
 library cocoon;
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:icons_helper/icons_helper.dart';
-import 'dart:convert';
 
 class Cocoon extends StatelessWidget {
   final Map<String, dynamic> _json;
@@ -94,6 +95,7 @@ class Cocoon extends StatelessWidget {
       home: Cocoon(json['home']),
       title: json['title'],
       theme: _buildTheme(context, json['theme']),
+      debugShowCheckedModeBanner: json["debug"] != null ? json["debug"] : false,
     );
   }
 
