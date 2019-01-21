@@ -19,12 +19,18 @@ import 'package:cocoon/cocoon.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(Cocoon.appFromUrl(
-      "{Your Cocoon API URL}",
-      fallback: "{Your Fallback JSON}",
-    ));
+  runApp(CocoonApp());
+}
+
+class CocoonApp extends StatelessWidget {
+  Widget build(BuildContext context) {
+    return Cocoon.fromUrl("{YOUR_COCOON_API_URL}",
+        fallback: "{YOUR_FALLBACK_JSON}");
+  }
 }
 ```
+
+Initialising your app this way means that you can take advantage of hot reloading.
 
 ### Fallback JSON
 
