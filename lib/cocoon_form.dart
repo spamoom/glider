@@ -61,6 +61,8 @@ class _CocoonFormState extends State<CocoonForm> {
         return _buildSwitch(context, json);
       case 'dropdown_menu':
         return _buildDropdownButton(context, json);
+      case 'radio_group':
+        return _buildRadioGroup(context, json);
       default:
         return ListTile();
     }
@@ -171,6 +173,46 @@ class _CocoonFormState extends State<CocoonForm> {
           labelText: json['label'],
         ),
       ),
+    );
+  }
+
+  Widget _buildRadioGroup(BuildContext context, Map<String, dynamic> json) {
+    final List<Map<String, dynamic>> options = [];
+    json['options'].forEach((option) {
+      options.add(option);
+    });
+
+    final List<Widget> children = [
+      Divider(),
+      Padding(
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        child: Text(
+          json['label'],
+          style: Theme.of(context).textTheme.subtitle,
+        ),
+      )
+    ];
+
+    children.addAll(options.map((option) {
+      return RadioListTile(
+        value: option['value'],
+        groupValue: _values[json['name']],
+        onChanged: (value) {
+          _setValue(json['name'], value);
+        },
+        title: option['title'] != null ? Text(option['title']) : null,
+        subtitle: option['subtitle'] != null ? Text(option['subtitle']) : null,
+        secondary: option['icon'] != null
+            ? Icon(getIconGuessFavorMaterial(name: option['icon']))
+            : null,
+      );
+    }).toList());
+
+    children.add(Divider());
+
+    return Column(
+      children: children,
+      crossAxisAlignment: CrossAxisAlignment.start,
     );
   }
 }
