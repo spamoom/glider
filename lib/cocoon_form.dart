@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:icons_helper/icons_helper.dart';
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 class CocoonForm extends StatefulWidget {
   final Map<String, dynamic> _json;
@@ -64,6 +65,8 @@ class _CocoonFormState extends State<CocoonForm> {
         return _buildDropdownButton(context, json);
       case 'radio_group':
         return _buildRadioGroup(context, json);
+      case 'date':
+        return _buildDatePicker(context, json);
       default:
         return ListTile();
     }
@@ -214,6 +217,34 @@ class _CocoonFormState extends State<CocoonForm> {
     return Column(
       children: children,
       crossAxisAlignment: CrossAxisAlignment.start,
+    );
+  }
+
+  Widget _buildDatePicker(BuildContext context, Map<String, dynamic> json) {
+    final jsonFormat = DateFormat("yyyy/MM/dd");
+    final displayFormat = DateFormat(json['format'] ?? "dd/MM/yyyy");
+    return ListTile(
+      title:
+          Text(displayFormat.format(jsonFormat.parse(_values[json['name']]))),
+      subtitle: json['label'] != null ? Text(json['label']) : null,
+      leading: json['icon'] != null
+          ? Icon(getIconGuessFavorMaterial(name: json['icon']))
+          : null,
+      onTap: () async {
+        final newDate = await showDatePicker(
+          context: context,
+          initialDate: jsonFormat.parse(_values[json['name']]),
+          firstDate: json['min'] != null
+              ? jsonFormat.parse(json['min'])
+              : DateTime.now().add(Duration(days: -365 * 100)),
+          lastDate: json['max'] != null
+              ? jsonFormat.parse(json['max'])
+              : DateTime.now().add(Duration(days: 365 * 100)),
+        );
+        if (newDate != null) {
+          _setValue(json['name'], jsonFormat.format(newDate));
+        }
+      },
     );
   }
 }
