@@ -622,18 +622,7 @@ class Cocoon extends StatelessWidget {
     Map<String, dynamic> json, {
     GlobalKey<_CocoonState> stateKey,
   }) {
-    dynamic text = json["text"];
-    if (stateKey != null && text is Map) {
-      _CocoonState currentState = stateKey.currentState;
-      if (currentState != null) {
-        Map<String, dynamic> obj = text;
-        if (obj["type"] == "state_value") {
-          String key = obj["key"];
-          return Text(currentState._state[key]);
-        }
-      }
-    }
-
+    String text = _valueFromState(json, "text", stateKey);
     return Text(text);
   }
 
@@ -657,7 +646,27 @@ class Cocoon extends StatelessWidget {
     };
   }
 
-  static Color _colorFromHex(String hex) {
+  // Get the value of the given field from the state if present
+  static dynamic _valueFromState(
+    Map<String, dynamic> json,
+    String fieldKey,
+    GlobalKey<_CocoonState> stateKey,
+  ) {
+    dynamic jsonValue = json[fieldKey];
+
+    if (stateKey != null &&
+        jsonValue is Map &&
+        jsonValue['type'] == 'state_value') {
+      String valueKey = jsonValue['key'];
+      _CocoonState currentState = stateKey.currentState;
+      return currentState._state[valueKey];
+    }
+    return json[fieldKey];
+  }
+
+  static Color _colorFromHex(
+    String hex,
+  ) {
     if (hex != null && hex.isNotEmpty) {
       return Color(int.parse(hex.replaceAll('#', ''), radix: 16))
           .withOpacity(1.0);
