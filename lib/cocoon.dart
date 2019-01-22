@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:icons_helper/icons_helper.dart';
 import 'bottom_nav_scaffold.dart';
+import 'cocoon_form.dart';
 
 /// A [Widget] based on a JSON-formatted definition.
 class Cocoon extends StatelessWidget {
@@ -131,6 +132,8 @@ class Cocoon extends StatelessWidget {
         return _buildDrawer(context, _json);
       case 'fab':
         return _buildFab(context, _json);
+      case 'form':
+        return CocoonForm(_json);
       case 'hero':
         return _buildHero(context, _json);
       case 'icon':
