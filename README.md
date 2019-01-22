@@ -41,7 +41,7 @@ which has been stored and bundled with the app.
 
 ### App
 
-This should be the root of the JSON tree.
+This should be the root of the application.
 
 ```json
 {
