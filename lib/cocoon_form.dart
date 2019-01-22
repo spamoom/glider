@@ -59,6 +59,8 @@ class _CocoonFormState extends State<CocoonForm> {
         return _buildCheckbox(context, json);
       case 'switch':
         return _buildSwitch(context, json);
+      case 'dropdown_menu':
+        return _buildDropdownButton(context, json);
       default:
         return ListTile();
     }
@@ -143,6 +145,32 @@ class _CocoonFormState extends State<CocoonForm> {
       secondary: json['icon'] != null
           ? Icon(getIconGuessFavorMaterial(name: json['icon']))
           : null,
+    );
+  }
+
+  Widget _buildDropdownButton(BuildContext context, Map<String, dynamic> json) {
+    final List<Map<String, dynamic>> options = [];
+    json['options'].forEach((option) {
+      options.add(option);
+    });
+
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      child: DropdownButtonFormField(
+        value: _values[json['name']],
+        onChanged: (value) {
+          _setValue(json['name'], value);
+        },
+        items: options.map((option) {
+          return DropdownMenuItem(
+            value: option['value'],
+            child: Text(option['text']),
+          );
+        }).toList(),
+        decoration: InputDecoration(
+          labelText: json['label'],
+        ),
+      ),
     );
   }
 }
