@@ -586,8 +586,8 @@ class Cocoon extends StatelessWidget {
     GlobalKey<_CocoonState> stateKey,
   }) {
     return SizedBox(
-      width: json['width'],
-      height: json['height'],
+      width: _valueFromState(json, "width", stateKey),
+      height: _valueFromState(json, "height", stateKey),
       child: json['child'] != null
           ? Cocoon(
               json['child'],
