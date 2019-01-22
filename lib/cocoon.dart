@@ -167,7 +167,7 @@ class Cocoon extends StatelessWidget {
       case 'url':
         return Cocoon._fromUrl(json['url']);
       case 'app':
-        return _buildApp(context, json);
+        return _buildApp(context, json, stateKey: stateKey);
       case 'scaffold':
         return _buildScaffold(context, json, stateKey: stateKey);
       case 'bottom_nav_scaffold':
@@ -222,14 +222,15 @@ class Cocoon extends StatelessWidget {
     }
   }
 
-  static MaterialApp _buildApp(
-    BuildContext context,
-    Map<String, dynamic> json,
-  ) {
+  static MaterialApp _buildApp(BuildContext context, Map<String, dynamic> json,
+      {GlobalKey<_CocoonState> stateKey}) {
     return MaterialApp(
-      home: Cocoon(json['home']),
+      home: Cocoon(
+        json['home'],
+        stateKey: stateKey,
+      ),
       title: json['title'],
-      theme: _buildTheme(context, json['theme']),
+      theme: _buildTheme(context, json['theme'], stateKey: stateKey),
       debugShowCheckedModeBanner: json["debug"] != null ? json["debug"] : false,
     );
   }
@@ -289,7 +290,7 @@ class Cocoon extends StatelessWidget {
     GlobalKey<_CocoonState> stateKey,
   }) {
     return AppBar(
-      title: Text(json['title']),
+      title: Text(_valueFromState(json, "title", stateKey)),
     );
   }
 
@@ -608,14 +609,16 @@ class Cocoon extends StatelessWidget {
 
   // TODO TextField
 
-  static ThemeData _buildTheme(
-    BuildContext context,
-    Map<String, dynamic> json,
-  ) {
+  static ThemeData _buildTheme(BuildContext context, Map<String, dynamic> json,
+      {GlobalKey<_CocoonState> stateKey}) {
+    String primary = _valueFromState(json, "primary_color", stateKey);
+    String accent = _valueFromState(json, "accent_color", stateKey);
+    bool dark = _valueFromState(json, "dark", stateKey);
+
     return ThemeData(
-      primaryColor: _colorFromHex(json['primary_color']),
-      accentColor: _colorFromHex(json['accent_color']),
-      brightness: json['dark'] == true ? Brightness.dark : Brightness.light,
+      primaryColor: _colorFromHex(primary),
+      accentColor: _colorFromHex(accent),
+      brightness: dark == true ? Brightness.dark : Brightness.light,
     );
   }
 
