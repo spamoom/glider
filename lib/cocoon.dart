@@ -11,12 +11,66 @@ import 'package:http/http.dart';
 import 'package:icons_helper/icons_helper.dart';
 import 'bottom_nav_scaffold.dart';
 
+// A wrapper [Widget] containing a [GlobalKey] and state values
+class _CocoonStateful extends StatefulWidget {
+  final GlobalKey<_CocoonState> globalKey;
+  final Map<String, dynamic> _json;
+
+  _CocoonStateful(this._json, this.globalKey) : super(key: globalKey);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _CocoonState(globalKey, _json);
+  }
+}
+
+class _CocoonState extends State<_CocoonStateful> {
+  final GlobalKey<_CocoonState> globalKey;
+  final Map<String, dynamic> _json;
+  Map<String, dynamic> _state;
+
+  _CocoonState(this.globalKey, this._json);
+
+  @override
+  void initState() {
+    super.initState();
+
+    _state = _json['state'];
+    _json.remove('state');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Cocoon(
+      _json,
+      stateKey: globalKey,
+    );
+  }
+
+  void updateStateValue(String key, dynamic value) {
+    setState(() {
+      _state[key] = value;
+    });
+  }
+
+  void updateState(Map<String, dynamic> values) {
+    setState(() {
+      values.forEach((key, value) {
+        _state[key] = value;
+      });
+    });
+  }
+}
+
 /// A [Widget] based on a JSON-formatted definition.
 class Cocoon extends StatelessWidget {
   final Map<String, dynamic> _json;
+  final GlobalKey<_CocoonState> _stateKey;
 
   /// Creates a [Cocoon] based on the given JSON-formatted [Map].
-  Cocoon(this._json, {Key key}) : super(key: key);
+  Cocoon(this._json, {GlobalKey<_CocoonState> stateKey, Key key})
+      : this._stateKey = stateKey,
+        super(key: key);
 
   /// Creates a [Cocoon] based on the given API endpoint, with an optional [fallback] parameter.
   ///
@@ -101,6 +155,12 @@ class Cocoon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(_json);
+
+    // If this widget contains a state object, wrapp with [_CocoonStateful]
+    if (_json.containsKey("state")) {
+      return _CocoonStateful(_json, GlobalKey());
+    }
+
     final String type = _json['type'];
     switch (type) {
       case 'url':
@@ -108,31 +168,31 @@ class Cocoon extends StatelessWidget {
       case 'app':
         return _buildApp(context, _json);
       case 'scaffold':
-        return _buildScaffold(context, _json);
+        return _buildScaffold(context, _json, stateKey: _stateKey);
       case 'bottom_nav_scaffold':
         return _buildBottomNavScaffold(context, _json);
       case 'app_bar':
-        return _buildAppBar(context, _json);
+        return _buildAppBar(context, _json, stateKey: _stateKey);
       case 'aspect_ratio':
-        return _buildAspectRatio(context, _json);
+        return _buildAspectRatio(context, _json, stateKey: _stateKey);
       case 'button_bar':
-        return _buildButtonBar(context, _json);
+        return _buildButtonBar(context, _json, stateKey: _stateKey);
       case 'card':
-        return _buildCard(context, _json);
+        return _buildCard(context, _json, stateKey: _stateKey);
       case 'center':
-        return _buildCenter(context, _json);
+        return _buildCenter(context, _json, stateKey: _stateKey);
       case 'circular_progress':
         return _buildCircularProgressIndicator(context, _json);
       case 'column':
-        return _buildColumn(context, _json);
+        return _buildColumn(context, _json, stateKey: _stateKey);
       case 'divider':
         return _buildDivider(context, _json);
       case 'drawer':
-        return _buildDrawer(context, _json);
+        return _buildDrawer(context, _json, stateKey: _stateKey);
       case 'fab':
-        return _buildFab(context, _json);
+        return _buildFab(context, _json, stateKey: _stateKey);
       case 'hero':
-        return _buildHero(context, _json);
+        return _buildHero(context, _json, stateKey: _stateKey);
       case 'icon':
         return _buildIcon(context, _json['icon']);
       case 'image':
@@ -140,19 +200,21 @@ class Cocoon extends StatelessWidget {
       case 'linear_progress':
         return _buildLinearProgressIndiator(context, _json);
       case 'list_tile':
-        return _buildListTile(context, _json);
+        return _buildListTile(context, _json, stateKey: _stateKey);
       case 'list_view':
-        return _buildListView(context, _json);
+        return _buildListView(context, _json, stateKey: _stateKey);
       case 'padding':
-        return _buildPadding(context, _json);
+        return _buildPadding(context, _json, stateKey: _stateKey);
       case 'sized_box':
-        return _buildSizedBox(context, _json);
+        return _buildSizedBox(context, _json, stateKey: _stateKey);
       case 'row':
-        return _buildRow(context, _json);
+        return _buildRow(context, _json, stateKey: _stateKey);
       case 'text':
-        return _buildText(context, _json);
+        return _buildText(context, _json, stateKey: _stateKey);
       case 'tooltip':
         return _buildTooltip(context, _json);
+      case 'button':
+        return _buildButton(context, _json, stateKey: _stateKey);
       default:
         return Center();
     }
@@ -172,19 +234,43 @@ class Cocoon extends StatelessWidget {
 
   static Scaffold _buildScaffold(
     BuildContext context,
-    Map<String, dynamic> json,
-  ) {
+    Map<String, dynamic> json, {
+    GlobalKey<_CocoonState> stateKey,
+  }) {
     return Scaffold(
       appBar: json['app_bar'] != null
-          ? _buildAppBar(context, json['app_bar'])
+          ? _buildAppBar(context, json['app_bar'], stateKey: stateKey)
           : null,
-      body: json['body'] != null ? Cocoon(json['body']) : null,
-      floatingActionButton: json['fab'] != null ? Cocoon(json['fab']) : null,
-      drawer: json['drawer'] != null ? Cocoon(json['drawer']) : null,
-      bottomNavigationBar:
-          json['bottom_bar'] != null ? Cocoon(json['bottom_bar']) : null,
-      bottomSheet:
-          json['bottom_sheet'] != null ? Cocoon(json['bottom_sheet']) : null,
+      body: json['body'] != null
+          ? Cocoon(
+              json['body'],
+              stateKey: stateKey,
+            )
+          : null,
+      floatingActionButton: json['fab'] != null
+          ? Cocoon(
+              json['fab'],
+              stateKey: stateKey,
+            )
+          : null,
+      drawer: json['drawer'] != null
+          ? Cocoon(
+              json['drawer'],
+              stateKey: stateKey,
+            )
+          : null,
+      bottomNavigationBar: json['bottom_bar'] != null
+          ? Cocoon(
+              json['bottom_bar'],
+              stateKey: stateKey,
+            )
+          : null,
+      bottomSheet: json['bottom_sheet'] != null
+          ? Cocoon(
+              json['bottom_sheet'],
+              stateKey: stateKey,
+            )
+          : null,
     );
   }
 
@@ -197,8 +283,9 @@ class Cocoon extends StatelessWidget {
 
   static AppBar _buildAppBar(
     BuildContext context,
-    Map<String, dynamic> json,
-  ) {
+    Map<String, dynamic> json, {
+    GlobalKey<_CocoonState> stateKey,
+  }) {
     return AppBar(
       title: Text(json['title']),
     );
@@ -206,8 +293,9 @@ class Cocoon extends StatelessWidget {
 
   static AspectRatio _buildAspectRatio(
     BuildContext context,
-    Map<String, dynamic> json,
-  ) {
+    Map<String, dynamic> json, {
+    GlobalKey<_CocoonState> stateKey,
+  }) {
     return AspectRatio(
       aspectRatio: json['aspect_ratio'],
       child: Cocoon(json['child']),
@@ -218,11 +306,16 @@ class Cocoon extends StatelessWidget {
 
   static ButtonBar _buildButtonBar(
     BuildContext context,
-    Map<String, dynamic> json,
-  ) {
+    Map<String, dynamic> json, {
+    GlobalKey<_CocoonState> stateKey,
+  }) {
     final List<dynamic> buttonsJson = json['buttons'];
-    final List<Widget> buttons =
-        buttonsJson.map((button) => Cocoon(button)).toList();
+    final List<Widget> buttons = buttonsJson
+        .map((button) => Cocoon(
+              button,
+              stateKey: stateKey,
+            ))
+        .toList();
     return ButtonBar(
       children: buttons,
     );
@@ -230,10 +323,14 @@ class Cocoon extends StatelessWidget {
 
   static Card _buildCard(
     BuildContext context,
-    Map<String, dynamic> json,
-  ) {
+    Map<String, dynamic> json, {
+    GlobalKey<_CocoonState> stateKey,
+  }) {
     return Card(
-      child: Cocoon(json['child']),
+      child: Cocoon(
+        json['child'],
+        stateKey: stateKey,
+      ),
       color: _colorFromHex(json['color']),
       elevation: json['elevation'] ?? 1.0,
     );
@@ -241,10 +338,16 @@ class Cocoon extends StatelessWidget {
 
   static Center _buildCenter(
     BuildContext context,
-    Map<String, dynamic> json,
-  ) {
+    Map<String, dynamic> json, {
+    GlobalKey<_CocoonState> stateKey,
+  }) {
     return Center(
-      child: json['child'] != null ? Cocoon(json['child']) : null,
+      child: json['child'] != null
+          ? Cocoon(
+              json['child'],
+              stateKey: stateKey,
+            )
+          : null,
     );
   }
 
@@ -259,13 +362,15 @@ class Cocoon extends StatelessWidget {
     return CircularProgressIndicator();
   }
 
-  static Column _buildColumn(
-    BuildContext context,
-    Map<String, dynamic> json,
-  ) {
+  static Column _buildColumn(BuildContext context, Map<String, dynamic> json,
+      {GlobalKey<_CocoonState> stateKey}) {
     final List<dynamic> childrenJson = json['children'];
-    final List<Widget> children =
-        childrenJson.map((child) => Cocoon(child)).toList();
+    final List<Widget> children = childrenJson
+        .map((child) => Cocoon(
+              child,
+              stateKey: stateKey,
+            ))
+        .toList();
     return Column(
       children: children,
     );
@@ -282,9 +387,14 @@ class Cocoon extends StatelessWidget {
 
   static Drawer _buildDrawer(
     BuildContext context,
-    Map<String, dynamic> json,
-  ) {
-    return Drawer(child: Cocoon(json['child']));
+    Map<String, dynamic> json, {
+    GlobalKey<_CocoonState> stateKey,
+  }) {
+    return Drawer(
+        child: Cocoon(
+      json['child'],
+      stateKey: stateKey,
+    ));
   }
 
   // TODO Dropdown button
@@ -293,13 +403,22 @@ class Cocoon extends StatelessWidget {
 
   static FloatingActionButton _buildFab(
     BuildContext context,
-    Map<String, dynamic> json,
-  ) {
-    final Function onPressed = () {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => Cocoon(json['destination']),
-      ));
-    };
+    Map<String, dynamic> json, {
+    GlobalKey<_CocoonState> stateKey,
+  }) {
+    Function onPressed;
+    if (json.containsKey("state_change")) {
+      Map<String, dynamic> stateChange = json["state_change"];
+      onPressed = _stateChange(stateKey, stateChange);
+    } else if (json.containsKey("destination")) {
+      onPressed = () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => Cocoon(json['destination']),
+        ));
+      };
+    } else {
+      onPressed = () {};
+    }
     return json['label'] != null
         ? FloatingActionButton.extended(
             icon: _buildIcon(context, json['icon']),
@@ -312,6 +431,30 @@ class Cocoon extends StatelessWidget {
           );
   }
 
+  static RaisedButton _buildButton(
+    BuildContext context,
+    Map<String, dynamic> json, {
+    GlobalKey<_CocoonState> stateKey,
+  }) {
+    Function onPressed;
+    if (json.containsKey("state_change")) {
+      Map<String, dynamic> stateChange = json["state_change"];
+      onPressed = _stateChange(stateKey, stateChange);
+    } else if (json.containsKey("destination")) {
+      onPressed = () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => Cocoon(json['destination']),
+        ));
+      };
+    } else {
+      onPressed = () {};
+    }
+    return RaisedButton(
+      child: Text(json['label']),
+      onPressed: onPressed,
+    );
+  }
+
   // TODO Form
 
   // TODO FormField
@@ -320,11 +463,15 @@ class Cocoon extends StatelessWidget {
 
   static Hero _buildHero(
     BuildContext context,
-    Map<String, dynamic> json,
-  ) {
+    Map<String, dynamic> json, {
+    GlobalKey<_CocoonState> stateKey,
+  }) {
     return Hero(
       tag: json['tag'],
-      child: Cocoon(json['child']),
+      child: Cocoon(
+        json['child'],
+        stateKey: stateKey,
+      ),
     );
   }
 
@@ -347,8 +494,9 @@ class Cocoon extends StatelessWidget {
 
   static ListTile _buildListTile(
     BuildContext context,
-    Map<String, dynamic> json,
-  ) {
+    Map<String, dynamic> json, {
+    GlobalKey<_CocoonState> stateKey,
+  }) {
     final Function onTap = () {
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => Cocoon(json['destination']),
@@ -365,20 +513,29 @@ class Cocoon extends StatelessWidget {
 
   static ListView _buildListView(
     BuildContext context,
-    Map<String, dynamic> json,
-  ) {
+    Map<String, dynamic> json, {
+    GlobalKey<_CocoonState> stateKey,
+  }) {
     final List<dynamic> childrenJson = json['children'];
-    final List<Widget> children =
-        childrenJson.map((child) => Cocoon(child)).toList();
+    final List<Widget> children = childrenJson
+        .map((child) => Cocoon(
+              child,
+              stateKey: stateKey,
+            ))
+        .toList();
     return ListView(children: children);
   }
 
   static Padding _buildPadding(
     BuildContext context,
-    Map<String, dynamic> json,
-  ) {
+    Map<String, dynamic> json, {
+    GlobalKey<_CocoonState> stateKey,
+  }) {
     return Padding(
-        child: Cocoon(json['child']),
+        child: Cocoon(
+          json['child'],
+          stateKey: stateKey,
+        ),
         padding: json['padding'] != null
             ? EdgeInsets.all(json['padding'])
             : json['padding_vertical'] != null &&
@@ -405,11 +562,16 @@ class Cocoon extends StatelessWidget {
 
   static Row _buildRow(
     BuildContext context,
-    Map<String, dynamic> json,
-  ) {
+    Map<String, dynamic> json, {
+    GlobalKey<_CocoonState> stateKey,
+  }) {
     final List<dynamic> childrenJson = json['children'];
-    final List<Widget> children =
-        childrenJson.map((child) => Cocoon(child)).toList();
+    final List<Widget> children = childrenJson
+        .map((child) => Cocoon(
+              child,
+              stateKey: stateKey,
+            ))
+        .toList();
     return Row(
       children: children,
     );
@@ -417,12 +579,18 @@ class Cocoon extends StatelessWidget {
 
   static SizedBox _buildSizedBox(
     BuildContext context,
-    Map<String, dynamic> json,
-  ) {
+    Map<String, dynamic> json, {
+    GlobalKey<_CocoonState> stateKey,
+  }) {
     return SizedBox(
       width: json['width'],
       height: json['height'],
-      child: json['child'] != null ? Cocoon(json['child']) : null,
+      child: json['child'] != null
+          ? Cocoon(
+              json['child'],
+              stateKey: stateKey,
+            )
+          : null,
     );
   }
 
@@ -451,9 +619,22 @@ class Cocoon extends StatelessWidget {
 
   static Text _buildText(
     BuildContext context,
-    Map<String, dynamic> json,
-  ) {
-    return Text(json['text']);
+    Map<String, dynamic> json, {
+    GlobalKey<_CocoonState> stateKey,
+  }) {
+    dynamic text = json["text"];
+    if (stateKey != null && text is Map) {
+      _CocoonState currentState = stateKey.currentState;
+      if (currentState != null) {
+        Map<String, dynamic> obj = text;
+        if (obj["type"] == "state_value") {
+          String key = obj["key"];
+          return Text(currentState._state[key]);
+        }
+      }
+    }
+
+    return Text(text);
   }
 
   static Tooltip _buildTooltip(
@@ -464,6 +645,16 @@ class Cocoon extends StatelessWidget {
       child: Cocoon(json['child']),
       message: json['message'],
     );
+  }
+
+  static Function _stateChange(
+      GlobalKey<_CocoonState> stateKey, Map<String, dynamic> stateChange) {
+    return () {
+      _CocoonState currentState = stateKey.currentState;
+      if (currentState != null) {
+        currentState.updateState(stateChange);
+      }
+    };
   }
 
   static Color _colorFromHex(String hex) {
