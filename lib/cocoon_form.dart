@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:icons_helper/icons_helper.dart';
 import 'dart:convert';
 
 class CocoonForm extends StatefulWidget {
@@ -28,7 +29,7 @@ class _CocoonFormState extends State<CocoonForm> {
     print(_values);
   }
 
-  void setValue(String name, dynamic value) {
+  void _setValue(String name, dynamic value) {
     setState(() {
       _values[name] = value;
     });
@@ -43,11 +44,8 @@ class _CocoonFormState extends State<CocoonForm> {
     });
     return Form(
       key: _formKey,
-      child: Padding(
-        padding: EdgeInsets.all(8),
-        child: ListView(
-          children: children,
-        ),
+      child: ListView(
+        children: children,
       ),
     );
   }
@@ -56,6 +54,8 @@ class _CocoonFormState extends State<CocoonForm> {
     switch (json['type']) {
       case 'text_field':
         return _buildTextField(context, json);
+      case 'checkbox':
+        return _buildCheckbox(context, json);
       default:
         return ListTile();
     }
@@ -100,7 +100,7 @@ class _CocoonFormState extends State<CocoonForm> {
     }
 
     return Padding(
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: TextFormField(
         controller: _textControllers[json['name']],
         decoration: InputDecoration(
@@ -112,6 +112,20 @@ class _CocoonFormState extends State<CocoonForm> {
         textCapitalization: capitalization,
         obscureText: json['obscure_text'] == true,
       ),
+    );
+  }
+
+  Widget _buildCheckbox(BuildContext context, Map<String, dynamic> json) {
+    return CheckboxListTile(
+      value: _values[json['name']],
+      onChanged: (value) {
+        _setValue(json['name'], value);
+      },
+      title: json['title'] != null ? Text(json['title']) : null,
+      subtitle: json['subtitle'] != null ? Text(json['subtitle']) : null,
+      secondary: json['icon'] != null
+          ? Icon(getIconGuessFavorMaterial(name: json['icon']))
+          : null,
     );
   }
 }
