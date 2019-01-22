@@ -32,6 +32,7 @@ class _CocoonFormState extends State<CocoonForm> {
   void _setValue(String name, dynamic value) {
     setState(() {
       _values[name] = value;
+      print('$name: $value');
     });
   }
 
@@ -56,6 +57,8 @@ class _CocoonFormState extends State<CocoonForm> {
         return _buildTextField(context, json);
       case 'checkbox':
         return _buildCheckbox(context, json);
+      case 'switch':
+        return _buildSwitch(context, json);
       default:
         return ListTile();
     }
@@ -117,6 +120,20 @@ class _CocoonFormState extends State<CocoonForm> {
 
   Widget _buildCheckbox(BuildContext context, Map<String, dynamic> json) {
     return CheckboxListTile(
+      value: _values[json['name']],
+      onChanged: (value) {
+        _setValue(json['name'], value);
+      },
+      title: json['title'] != null ? Text(json['title']) : null,
+      subtitle: json['subtitle'] != null ? Text(json['subtitle']) : null,
+      secondary: json['icon'] != null
+          ? Icon(getIconGuessFavorMaterial(name: json['icon']))
+          : null,
+    );
+  }
+
+  Widget _buildSwitch(BuildContext context, Map<String, dynamic> json) {
+    return SwitchListTile(
       value: _values[json['name']],
       onChanged: (value) {
         _setValue(json['name'], value);
