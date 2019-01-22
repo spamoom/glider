@@ -65,6 +65,8 @@ class _CocoonFormState extends State<CocoonForm> {
         return _buildDropdownButton(context, json);
       case 'radio_group':
         return _buildRadioGroup(context, json);
+      case 'time':
+        return _buildTimePicker(context, json);
       case 'date':
         return _buildDatePicker(context, json);
       default:
@@ -243,6 +245,27 @@ class _CocoonFormState extends State<CocoonForm> {
         );
         if (newDate != null) {
           _setValue(json['name'], jsonFormat.format(newDate));
+        }
+      },
+    );
+  }
+
+  Widget _buildTimePicker(BuildContext contexst, Map<String, dynamic> json) {
+    final format = DateFormat("H:mm");
+    return ListTile(
+      title: Text(_values[json['name']]),
+      subtitle: json['label'] != null ? Text(json['label']) : null,
+      leading: json['icon'] != null
+          ? Icon(getIconGuessFavorMaterial(name: json['icon']))
+          : null,
+      onTap: () async {
+        final newTime = await showTimePicker(
+          context: context,
+          initialTime:
+              TimeOfDay.fromDateTime(format.parse(_values[json['name']])),
+        );
+        if (newTime != null) {
+          _setValue(json['name'], newTime.format(context));
         }
       },
     );
