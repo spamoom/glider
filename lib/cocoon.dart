@@ -1,3 +1,7 @@
+/// A [Cocoon] is a [Widget] which takes a JSON definition and translates it into an app.
+///
+/// The JSON definition can be passed as a [String] or as a [Map].
+/// Additionally, you can pass a URL from which to retrieve the definition.
 library cocoon;
 
 import 'dart:convert';
