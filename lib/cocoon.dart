@@ -449,6 +449,9 @@ class Cocoon extends StatelessWidget {
       primaryColor: _colorFromHex(json['primary_color']),
       accentColor: _colorFromHex(json['accent_color']),
       brightness: json['dark'] == true ? Brightness.dark : Brightness.light,
+      inputDecorationTheme: InputDecorationTheme(
+        filled: json['input_theme']['filled'] == true,
+      ),
     );
   }
 

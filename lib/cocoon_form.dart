@@ -47,6 +47,7 @@ class _CocoonFormState extends State<CocoonForm> {
       key: _formKey,
       child: ListView(
         children: children,
+        padding: EdgeInsets.symmetric(vertical: 8),
       ),
     );
   }
