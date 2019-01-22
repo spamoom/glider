@@ -301,7 +301,7 @@ class Cocoon extends StatelessWidget {
   }) {
     return AspectRatio(
       aspectRatio: json['aspect_ratio'],
-      child: Cocoon(json['child']),
+      child: Cocoon(json['child'], stateKey: stateKey),
     );
   }
 
@@ -329,13 +329,16 @@ class Cocoon extends StatelessWidget {
     Map<String, dynamic> json, {
     GlobalKey<_CocoonState> stateKey,
   }) {
+    String color = _valueFromState(json, "color", stateKey);
+    double elevation = _valueFromState(json, "elevation", stateKey) ?? 1.0;
+
     return Card(
       child: Cocoon(
         json['child'],
         stateKey: stateKey,
       ),
-      color: _colorFromHex(json['color']),
-      elevation: json['elevation'] ?? 1.0,
+      color: _colorFromHex(color),
+      elevation: elevation,
     );
   }
 
