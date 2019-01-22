@@ -195,7 +195,8 @@ class Cocoon extends StatelessWidget {
       case 'hero':
         return _buildHero(context, json, stateKey: stateKey);
       case 'icon':
-        return _buildIcon(context, json['icon']);
+        String icon = _valueFromState(json, "icon", stateKey);
+        return _buildIcon(context, icon);
       case 'image':
         return _buildImage(context, json);
       case 'linear_progress':
