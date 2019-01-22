@@ -36,15 +36,11 @@ class _CocoonState extends State<_CocoonStateful> {
     super.initState();
 
     _state = _json['state'];
-    _json.remove('state');
   }
 
   @override
   Widget build(BuildContext context) {
-    return Cocoon(
-      _json,
-      stateKey: globalKey,
-    );
+    return Cocoon._buildWidget(context, _json, globalKey);
   }
 
   void updateStateValue(String key, dynamic value) {
@@ -161,60 +157,65 @@ class Cocoon extends StatelessWidget {
       return _CocoonStateful(_json, GlobalKey());
     }
 
-    final String type = _json['type'];
+    return _buildWidget(context, _json, _stateKey);
+  }
+
+  static Widget _buildWidget(BuildContext context, Map<String, dynamic> json,
+      GlobalKey<_CocoonState> stateKey) {
+    final String type = json['type'];
     switch (type) {
       case 'url':
-        return Cocoon._fromUrl(_json['url']);
+        return Cocoon._fromUrl(json['url']);
       case 'app':
-        return _buildApp(context, _json);
+        return _buildApp(context, json);
       case 'scaffold':
-        return _buildScaffold(context, _json, stateKey: _stateKey);
+        return _buildScaffold(context, json, stateKey: stateKey);
       case 'bottom_nav_scaffold':
-        return _buildBottomNavScaffold(context, _json);
+        return _buildBottomNavScaffold(context, json);
       case 'app_bar':
-        return _buildAppBar(context, _json, stateKey: _stateKey);
+        return _buildAppBar(context, json, stateKey: stateKey);
       case 'aspect_ratio':
-        return _buildAspectRatio(context, _json, stateKey: _stateKey);
+        return _buildAspectRatio(context, json, stateKey: stateKey);
       case 'button_bar':
-        return _buildButtonBar(context, _json, stateKey: _stateKey);
+        return _buildButtonBar(context, json, stateKey: stateKey);
       case 'card':
-        return _buildCard(context, _json, stateKey: _stateKey);
+        return _buildCard(context, json, stateKey: stateKey);
       case 'center':
-        return _buildCenter(context, _json, stateKey: _stateKey);
+        return _buildCenter(context, json, stateKey: stateKey);
       case 'circular_progress':
-        return _buildCircularProgressIndicator(context, _json);
+        return _buildCircularProgressIndicator(context, json);
       case 'column':
-        return _buildColumn(context, _json, stateKey: _stateKey);
+        return _buildColumn(context, json, stateKey: stateKey);
       case 'divider':
-        return _buildDivider(context, _json);
+        return _buildDivider(context, json);
       case 'drawer':
-        return _buildDrawer(context, _json, stateKey: _stateKey);
+        return _buildDrawer(context, json, stateKey: stateKey);
       case 'fab':
-        return _buildFab(context, _json, stateKey: _stateKey);
+        return _buildFab(context, json, stateKey: stateKey);
       case 'hero':
-        return _buildHero(context, _json, stateKey: _stateKey);
+        return _buildHero(context, json, stateKey: stateKey);
       case 'icon':
-        return _buildIcon(context, _json['icon']);
+        return _buildIcon(context, json['icon']);
       case 'image':
-        return _buildImage(context, _json);
+        return _buildImage(context, json);
       case 'linear_progress':
-        return _buildLinearProgressIndiator(context, _json);
+        return _buildLinearProgressIndiator(context, json);
       case 'list_tile':
-        return _buildListTile(context, _json, stateKey: _stateKey);
+        return _buildListTile(context, json, stateKey: stateKey);
       case 'list_view':
-        return _buildListView(context, _json, stateKey: _stateKey);
+        return _buildListView(context, json, stateKey: stateKey);
       case 'padding':
-        return _buildPadding(context, _json, stateKey: _stateKey);
+        return _buildPadding(context, json, stateKey: stateKey);
       case 'sized_box':
-        return _buildSizedBox(context, _json, stateKey: _stateKey);
+        return _buildSizedBox(context, json, stateKey: stateKey);
       case 'row':
-        return _buildRow(context, _json, stateKey: _stateKey);
+        return _buildRow(context, json, stateKey: stateKey);
       case 'text':
-        return _buildText(context, _json, stateKey: _stateKey);
+        return _buildText(context, json, stateKey: stateKey);
       case 'tooltip':
-        return _buildTooltip(context, _json);
+        return _buildTooltip(context, json);
       case 'button':
-        return _buildButton(context, _json, stateKey: _stateKey);
+        return _buildButton(context, json, stateKey: stateKey);
       default:
         return Center();
     }
