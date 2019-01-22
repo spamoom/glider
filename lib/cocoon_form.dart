@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:icons_helper/icons_helper.dart';
+import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 
@@ -44,6 +45,10 @@ class _CocoonFormState extends State<CocoonForm> {
     fields.forEach((field) {
       children.add(_buildField(context, field));
     });
+
+    final buttons = _json['buttons'];
+    children.add(_buildButtons(context, buttons));
+
     return Form(
       key: _formKey,
       child: ListView(
@@ -250,7 +255,7 @@ class _CocoonFormState extends State<CocoonForm> {
     );
   }
 
-  Widget _buildTimePicker(BuildContext contexst, Map<String, dynamic> json) {
+  Widget _buildTimePicker(BuildContext context, Map<String, dynamic> json) {
     final format = DateFormat("H:mm");
     return ListTile(
       title: Text(_values[json['name']]),
@@ -266,6 +271,95 @@ class _CocoonFormState extends State<CocoonForm> {
         );
         if (newTime != null) {
           _setValue(json['name'], newTime.format(context));
+        }
+      },
+    );
+  }
+
+  Widget _buildButtons(BuildContext context, List json) {
+    final List<Widget> children = [];
+    json.forEach((button) {
+      children.add(_buildButton(context, button));
+    });
+    return ButtonBar(children: children);
+  }
+
+  Widget _buildButton(BuildContext context, Map<String, dynamic> json) {
+    switch (json['type']) {
+      case 'raised_button':
+        return _buildRaisedButton(context, json);
+      case 'text_button':
+        return _buildTextButton(context, json);
+      case 'outline_button':
+        return _buildOutlineButton(context, json);
+      default:
+        return null;
+    }
+  }
+
+  void _submit(BuildContext context) async {
+    // TODO
+    // final String submitTo = _json['submit_to'];
+    // if (submitTo != null) {
+    //   final response = await post(submitTo, body: jsonEncode(_values));
+    //   if (response.statusCode == 200) {
+    //     // Success
+    //   } else {
+    //     Scaffold.of(context)
+    //         .showSnackBar(SnackBar(content: Text('Something went wrong.')));
+    //   }
+    // }
+  }
+
+  void _goBack(BuildContext context) {
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    }
+  }
+
+  Widget _buildRaisedButton(BuildContext context, Map<String, dynamic> json) {
+    return RaisedButton(
+      child: Text(json['text']),
+      onPressed: () {
+        switch (json['role']) {
+          case 'submit':
+            _submit(context);
+            break;
+          case 'back':
+            _goBack(context);
+            break;
+        }
+      },
+    );
+  }
+
+  Widget _buildTextButton(BuildContext context, Map<String, dynamic> json) {
+    return FlatButton(
+      child: Text(json['text']),
+      onPressed: () {
+        switch (json['role']) {
+          case 'submit':
+            _submit(context);
+            break;
+          case 'back':
+            _goBack(context);
+            break;
+        }
+      },
+    );
+  }
+
+  Widget _buildOutlineButton(BuildContext context, Map<String, dynamic> json) {
+    return OutlineButton(
+      child: Text(json['text']),
+      onPressed: () {
+        switch (json['role']) {
+          case 'submit':
+            _submit(context);
+            break;
+          case 'back':
+            _goBack(context);
+            break;
         }
       },
     );

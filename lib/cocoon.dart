@@ -360,7 +360,9 @@ class Cocoon extends StatelessWidget {
     return ListTile(
       title: json['title'] != null ? Text(json['title']) : null,
       subtitle: json['subtitle'] != null ? Text(json['subtitle']) : null,
-      leading: json['leading'] != null ? Cocoon(json['leading']) : null,
+      leading: json['leading'] != null
+          ? Icon(getIconGuessFavorMaterial(name: json['leading']))
+          : null,
       trailing: json['trailing'] != null ? Cocoon(json['trailing']) : null,
       onTap: json['destination'] != null ? onTap : null,
     );
@@ -451,6 +453,10 @@ class Cocoon extends StatelessWidget {
       brightness: json['dark'] == true ? Brightness.dark : Brightness.light,
       inputDecorationTheme: InputDecorationTheme(
         filled: json['input_theme']['filled'] == true,
+      ),
+      buttonTheme: ButtonThemeData(
+        textTheme: ButtonTextTheme.primary,
+        buttonColor: _colorFromHex(json['primary_color']),
       ),
     );
   }
