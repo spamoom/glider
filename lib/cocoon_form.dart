@@ -123,12 +123,18 @@ class _CocoonFormState extends State<CocoonForm> {
         controller: _textControllers[json['name']],
         decoration: InputDecoration(
           labelText: json['label'],
-          helperText: json['help'],
           hintText: json['hint'],
         ),
         keyboardType: keyboardType,
         textCapitalization: capitalization,
         obscureText: json['obscure_text'] == true,
+        validator: (value) {
+          if (json['required'] == true && (value == null || value.isEmpty)) {
+            return 'Please enter a value';
+          } else {
+            return null;
+          }
+        },
       ),
     );
   }
@@ -183,6 +189,13 @@ class _CocoonFormState extends State<CocoonForm> {
         decoration: InputDecoration(
           labelText: json['label'],
         ),
+        validator: (value) {
+          if (json['required'] == true && value == null) {
+            return 'Please select an option';
+          } else {
+            return null;
+          }
+        },
       ),
     );
   }
@@ -297,18 +310,29 @@ class _CocoonFormState extends State<CocoonForm> {
     }
   }
 
-  void _submit(BuildContext context) async {
-    // TODO
-    // final String submitTo = _json['submit_to'];
-    // if (submitTo != null) {
-    //   final response = await post(submitTo, body: jsonEncode(_values));
-    //   if (response.statusCode == 200) {
-    //     // Success
-    //   } else {
-    //     Scaffold.of(context)
-    //         .showSnackBar(SnackBar(content: Text('Something went wrong.')));
-    //   }
-    // }
+  void _submit(BuildContext context) {
+    if (_formKey.currentState.validate()) {
+      final String submitTo = _json['submit_to'];
+      if (submitTo != null) {
+        post(
+          submitTo,
+          body: jsonEncode(_values),
+          headers: {
+            "content-type": "application/json",
+          },
+        ).then((Response response) {
+          print(response.body);
+        }).catchError((error) {
+          print(error);
+        });
+        // if (response.statusCode == 200) {
+        //   // Success
+        // } else {
+        //   Scaffold.of(context)
+        //       .showSnackBar(SnackBar(content: Text('Something went wrong.')));
+        // }
+      }
+    }
   }
 
   void _goBack(BuildContext context) {

@@ -453,6 +453,9 @@ class Cocoon extends StatelessWidget {
       brightness: json['dark'] == true ? Brightness.dark : Brightness.light,
       inputDecorationTheme: InputDecorationTheme(
         filled: json['input_theme']['filled'] == true,
+        border: json['input_theme']['outlined'] == true
+            ? OutlineInputBorder()
+            : UnderlineInputBorder(),
       ),
       buttonTheme: ButtonThemeData(
         textTheme: ButtonTextTheme.primary,
