@@ -7,20 +7,30 @@ import 'package:http/http.dart';
 import 'package:icons_helper/icons_helper.dart';
 import 'bottom_nav_scaffold.dart';
 
+/// A [Widget] based on a JSON-formatted definition.
 class Cocoon extends StatelessWidget {
   final Map<String, dynamic> _json;
 
+  /// Creates a [Cocoon] based on the given JSON-formatted [Map].
   Cocoon(this._json, {Key key}) : super(key: key);
 
+  /// Creates a [Cocoon] based on the given API endpoint, with an optional [fallback] parameter.
+  ///
+  /// The endpoint should return a JSON-formatted Cocoon definition.
+  ///
+  /// The [fallback] should be a JSON-formatted [String] defining the widget to display in case the endpoint can't be reached.
+  ///
+  /// If the endpoint returns an error, or there is no network connection, the [fallback] will be used.
+  /// If no [fallback] is given, a [Widget] displaying an error message will be displayed.
   static Widget appFromUrl(String url, {String fallback}) {
     return FutureBuilder(
       future: get(url),
       builder: (context, AsyncSnapshot<Response> snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data.statusCode == 200) {
-            return Cocoon(jsonDecode(snapshot.data.body));
+            return Cocoon.appFromString(snapshot.data.body);
           } else if (fallback != null) {
-            return Cocoon(jsonDecode(fallback));
+            return Cocoon.appFromString(fallback);
           } else {
             return MaterialApp(
               home: Center(
@@ -34,12 +44,20 @@ class Cocoon extends StatelessWidget {
             );
           }
         } else {
-          return Center(
-            child: CircularProgressIndicator(),
+          return MaterialApp(
+            home: Center(
+              child: CircularProgressIndicator(),
+            ),
+            title: "Cocoon App",
           );
         }
       },
     );
+  }
+
+  /// Creates a [Cocoon] based on a JSON-formatted [String] definition.
+  static Widget appFromString(String json) {
+    return Cocoon(jsonDecode(json));
   }
 
   static Widget _fromUrl(String url) {
