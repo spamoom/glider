@@ -460,6 +460,7 @@ class Cocoon extends StatelessWidget {
       buttonTheme: ButtonThemeData(
         textTheme: ButtonTextTheme.primary,
         buttonColor: _colorFromHex(json['primary_color']),
+        layoutBehavior: ButtonBarLayoutBehavior.constrained,
       ),
     );
   }
