@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:icons_helper/icons_helper.dart';
 import 'bottom_nav_scaffold.dart';
+import 'cocoon_form.dart';
 
 /// A [Widget] based on a JSON-formatted definition.
 class Cocoon extends StatelessWidget {
@@ -131,6 +132,8 @@ class Cocoon extends StatelessWidget {
         return _buildDrawer(context, _json);
       case 'fab':
         return _buildFab(context, _json);
+      case 'form':
+        return CocoonForm(_json);
       case 'hero':
         return _buildHero(context, _json);
       case 'icon':
@@ -357,7 +360,9 @@ class Cocoon extends StatelessWidget {
     return ListTile(
       title: json['title'] != null ? Text(json['title']) : null,
       subtitle: json['subtitle'] != null ? Text(json['subtitle']) : null,
-      leading: json['leading'] != null ? Cocoon(json['leading']) : null,
+      leading: json['leading'] != null
+          ? Icon(getIconGuessFavorMaterial(name: json['leading']))
+          : null,
       trailing: json['trailing'] != null ? Cocoon(json['trailing']) : null,
       onTap: json['destination'] != null ? onTap : null,
     );
@@ -446,6 +451,17 @@ class Cocoon extends StatelessWidget {
       primaryColor: _colorFromHex(json['primary_color']),
       accentColor: _colorFromHex(json['accent_color']),
       brightness: json['dark'] == true ? Brightness.dark : Brightness.light,
+      inputDecorationTheme: InputDecorationTheme(
+        filled: json['input_theme']['filled'] == true,
+        border: json['input_theme']['outlined'] == true
+            ? OutlineInputBorder()
+            : UnderlineInputBorder(),
+      ),
+      buttonTheme: ButtonThemeData(
+        textTheme: ButtonTextTheme.primary,
+        buttonColor: _colorFromHex(json['primary_color']),
+        layoutBehavior: ButtonBarLayoutBehavior.constrained,
+      ),
     );
   }
 
