@@ -232,7 +232,7 @@ class Cocoon extends StatelessWidget {
         json['home'],
         stateKey: stateKey,
       ),
-      title: json['title'],
+      title: _valueFromState(json, 'title', stateKey),
       theme: _buildTheme(context, json['theme'], stateKey: stateKey),
       debugShowCheckedModeBanner: json["debug"] != null ? json["debug"] : false,
     );
