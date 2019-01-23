@@ -16,3 +16,8 @@ The App widget should be the highest-level widget in your app i.e. the thing you
 ```
 
 All properties are required. The `home` property should be a Widget, and you probably want to use a [`scaffold`](scaffold.md).
+
+## See Also
+
+* [Scaffold](scaffold.md)
+* [Theme](theme.md)
