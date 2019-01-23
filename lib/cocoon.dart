@@ -425,15 +425,18 @@ class Cocoon extends StatelessWidget {
     } else {
       onPressed = () {};
     }
+
+    String icon = _valueFromState(json, 'icon', stateKey);
+
     return json['label'] != null
         ? FloatingActionButton.extended(
-            icon: _buildIcon(context, json['icon']),
-            label: Text(json['label']),
             onPressed: onPressed,
+            icon: _buildIcon(context, icon),
+            label: Text(_valueFromState(json, 'label', stateKey)),
           )
         : FloatingActionButton(
-            child: _buildIcon(context, json['icon']),
             onPressed: onPressed,
+            child: _buildIcon(context, icon),
           );
   }
 
