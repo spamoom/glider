@@ -312,15 +312,22 @@ class _CocoonFormState extends State<CocoonForm> {
 
   void _submit(BuildContext context) {
     if (_formKey.currentState.validate()) {
-      final String submitTo = _json['submit_to'];
+      final Map<String, dynamic> submitTo = _json['submit_to'];
       if (submitTo != null) {
-        post(
-          submitTo,
-          body: jsonEncode(_values),
-          headers: {
-            "content-type": "application/json",
-          },
-        ).then((Response response) {
+        Future<Response> call;
+        final String body = jsonEncode(_values);
+        final Map headers = {"content-type": "application/json"};
+        switch (submitTo['method']) {
+          case 'put':
+            call = put(submitTo['url'], body: body, headers: headers);
+            break;
+          case 'patch':
+            call = patch(submitTo['url'], body: body, headers: headers);
+            break;
+          default:
+            call = post(submitTo['url'], body: body, headers: headers);
+        }
+        call.then((Response response) {
           print(response.body);
         }).catchError((error) {
           print(error);
