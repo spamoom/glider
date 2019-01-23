@@ -509,8 +509,12 @@ class Cocoon extends StatelessWidget {
       ));
     };
     return ListTile(
-      title: json['title'] != null ? Text(json['title']) : null,
-      subtitle: json['subtitle'] != null ? Text(json['subtitle']) : null,
+      title: json['title'] != null
+          ? Text(_valueFromState(json, 'title', stateKey))
+          : null,
+      subtitle: json['subtitle'] != null
+          ? Text(_valueFromState(json, 'subtitle', stateKey))
+          : null,
       leading: json['leading'] != null ? Cocoon(json['leading']) : null,
       trailing: json['trailing'] != null ? Cocoon(json['trailing']) : null,
       onTap: json['destination'] != null ? onTap : null,
