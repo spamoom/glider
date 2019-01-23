@@ -7,7 +7,7 @@ Cocoon is two things:
 
 ## Why did we build Cocoon?
 
-In 2018, the mobile dev community fell in love with [Flutter](https://flutter.io/). It significantly reduced the workload related to creating a beautiful cross-platform mobile app.
+In 2018, the mobile dev community fell in love with [Flutter](https://flutter.io/). It significantly reduced the workload involved in creating a beautiful cross-platform mobile app.
 
 However, a problem it doesn't solve fully is the fact that most mobile apps consist of very similar UI components and behaviours. Naturally, Flutter has to cater for as many UIs as possible, but that does increase the workload when it comes to using basic, built-in Material Components.
 
