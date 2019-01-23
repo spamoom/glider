@@ -25,3 +25,5 @@ A perk of this architecture is that Cocoon apps can retrieve their definitions o
 Cocoon is designed to be both minimal and opinionated. Cocoon apps follow the [Material Design](https://material.io/) guidelines as closely as possible, and we provide limited options for theming.
 
 You shouldn't expect to have much control over the intricate design details of a Cocoon app. You can define a colour scheme and a few other theme properties, which will be applied across the app according to the Material guidelines. **Individual widgets are not themable at this time.**
+
+**Next: [Installation](installation.md)**
