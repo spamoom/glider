@@ -80,9 +80,13 @@ class _CocoonFormState extends State<CocoonForm> {
   }
 
   Widget _buildTextField(BuildContext context, Map<String, dynamic> json) {
-    _textControllers[json['name']] =
-        TextEditingController(text: json['initial_value']);
-
+    if (!_textControllers.containsKey(json['name'])) {
+      _textControllers[json['name']] =
+          TextEditingController(text: json['initial_value']);
+      _textControllers[json['name']].addListener(() {
+        _setValue(json['name'], _textControllers[json['name']].text);
+      });
+    }
     TextInputType keyboardType;
     TextCapitalization capitalization;
 
