@@ -459,8 +459,8 @@ class Cocoon extends StatelessWidget {
       onPressed = () {};
     }
     return RaisedButton(
-      child: Text(json['label']),
       onPressed: onPressed,
+      child: Text(_valueFromState(json, 'label', stateKey)),
     );
   }
 
