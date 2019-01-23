@@ -412,31 +412,19 @@ class Cocoon extends StatelessWidget {
     Map<String, dynamic> json, {
     GlobalKey<_CocoonState> stateKey,
   }) {
-    Function onPressed;
-    if (json.containsKey("state_change")) {
-      Map<String, dynamic> stateChange = json["state_change"];
-      onPressed = _stateChange(stateKey, stateChange);
-    } else if (json.containsKey("destination")) {
-      onPressed = () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Cocoon(json['destination']),
-        ));
-      };
-    } else {
-      onPressed = () {};
-    }
+    Function onTap = _onTap(context, json, stateKey);
 
     String icon = _valueFromState(json, 'icon', stateKey);
 
     return json['label'] != null
         ? FloatingActionButton.extended(
-            onPressed: onPressed,
             icon: _buildIcon(context, icon),
             label: Text(_valueFromState(json, 'label', stateKey)),
+            onPressed: onTap,
           )
         : FloatingActionButton(
-            onPressed: onPressed,
             child: _buildIcon(context, icon),
+            onPressed: onTap,
           );
   }
 
@@ -445,22 +433,11 @@ class Cocoon extends StatelessWidget {
     Map<String, dynamic> json, {
     GlobalKey<_CocoonState> stateKey,
   }) {
-    Function onPressed;
-    if (json.containsKey("state_change")) {
-      Map<String, dynamic> stateChange = json["state_change"];
-      onPressed = _stateChange(stateKey, stateChange);
-    } else if (json.containsKey("destination")) {
-      onPressed = () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Cocoon(json['destination']),
-        ));
-      };
-    } else {
-      onPressed = () {};
-    }
+    Function onTap = _onTap(context, json, stateKey);
+
     return RaisedButton(
-      onPressed: onPressed,
       child: Text(_valueFromState(json, 'label', stateKey)),
+      onPressed: onTap,
     );
   }
 
@@ -506,11 +483,8 @@ class Cocoon extends StatelessWidget {
     Map<String, dynamic> json, {
     GlobalKey<_CocoonState> stateKey,
   }) {
-    final Function onTap = () {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => Cocoon(json['destination']),
-      ));
-    };
+    final Function onTap = _onTap(context, json, stateKey);
+
     return ListTile(
       title: json['title'] != null
           ? Text(_valueFromState(json, 'title', stateKey))
@@ -651,14 +625,28 @@ class Cocoon extends StatelessWidget {
     );
   }
 
-  static Function _stateChange(
-      GlobalKey<_CocoonState> stateKey, Map<String, dynamic> stateChange) {
-    return () {
-      _CocoonState currentState = stateKey.currentState;
-      if (currentState != null) {
-        currentState.updateState(stateChange);
-      }
-    };
+  static Function _onTap(
+    BuildContext context,
+    Map<String, dynamic> json,
+    GlobalKey<_CocoonState> stateKey,
+  ) {
+    if (json.containsKey('destination')) {
+      return () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => Cocoon(json['destination']),
+        ));
+      };
+    } else if (json.containsKey('state_change') &&
+        stateKey != null &&
+        stateKey.currentState != null) {
+      return () {
+        _CocoonState currentState = stateKey.currentState;
+        if (currentState != null) {
+          currentState.updateState(json['state_change']);
+        }
+      };
+    }
+    return () {};
   }
 
   // Get the value of the given field from the state if present
