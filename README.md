@@ -331,3 +331,172 @@ Gets a widget definition from the specified URL. Designed for use with Scaffolds
     "url": "https://athing.com/thing.json"
 }
 ```
+
+## Forms
+
+You can create a Form widget like this:
+
+```json
+{
+    "type": "form",
+    "submit_to": {
+        "url": "https://jsonplaceholder.typicode.com/posts",
+        "method": "post"
+    },
+    "fields": [],
+    "buttons": []
+}
+```
+
+### Supported Form Fields
+
+All field widgets must have a `type` and a `name` (which will be the property name in the resulting JSON object).
+
+#### Text Fields
+
+```json
+{
+    "type": "text_field",
+    "name": "first_name",
+    "label": "First Name",
+    "capitalization": "words|sentences|characters",
+    "hint": "e.g. John",
+    "help": "Your first name",
+    "keyboard_type": "text|email|phone|number",
+    "required": true
+}
+```
+
+#### Checkbox
+
+```json
+{
+    "type": "checkbox",
+    "name": "terms",
+    "icon": "person",
+    "title": "Terms & Conditions",
+    "subtitle": "Do you agree to our Terms?",
+    "initial_value": false,
+    "required": true
+}
+```
+
+#### Switch
+
+```json
+{
+    "type": "switch",
+    "name": "pro",
+    "icon": null,
+    "title": "Pro Features",
+    "subtitle": null,
+    "initial_value": false
+}
+```
+
+#### Radio Group
+
+```json
+{
+    "type": "radio_group",
+    "name": "sex",
+    "label": "Sex",
+    "initial_value": "female",
+    "options": [
+    {
+        "value": "male",
+        "title": "Male",
+        "subtitle": null,
+        "icon": null
+    },
+    {
+        "value": "female",
+        "title": "Female",
+        "subtitle": null,
+        "icon": null
+    },
+    {
+        "value": "other",
+        "title": "Other/Prefer not to say",
+        "subtitle": null,
+        "icon": null
+    }
+    ]
+}
+```
+
+#### Dropdown Menu (Spinner)
+
+```json
+{
+    "type": "dropdown_menu",
+    "name": "sex",
+    "label": "Sex",
+    "initial_value": "female",
+    "options": [
+    {"value": "male", "text": "Male"},
+    {"value": "female", "text": "Female"},
+    {"value": "other", "text": "Other/Prefer not to say"}
+    ],
+    "required": true
+}
+```
+
+#### Time Picker
+
+*Displays a `ListTile` which, when tapped, shows a time picker.*
+
+```json
+{
+    "type": "time",
+    "name": "wake_up",
+    "label": "When do you wake up in the morning?",
+    "icon": "alarm",
+    "initial_value": "07:00",
+    "format": "H:mm",
+    "required": true
+}
+```
+
+#### Date Picker
+
+*Displays a `ListTile` which, when tapped, shows a date picker.*
+
+```json
+{
+    "type": "date",
+    "name": "dob",
+    "label": "Date of Birth",
+    "initial_value": "1995/05/20",
+    "icon": null,
+    "format": "dd/MM/yyyy",
+    "required": true
+}
+```
+
+### Buttons
+
+You can specify a number of Buttons which will be rendered in a Bottom Bar at the bottom of the form.
+
+Each button has a `type` and a `role`.
+
+Currently supported `type`s are:
+
+* `text_button`
+* `outline_button`
+* `raised_button`
+
+These `type`s are styled according to the corresponding Material Design specifications.
+
+Supported `role`s are:
+
+* `submit`, which submits the form according to the `submit_to` property in the Form definition
+* `back`, which navigates the app up one level if possible
+
+```json
+{
+    "type": "text_button",
+    "role": "submit",
+    "text": "Save"
+}
+```
