@@ -50,3 +50,5 @@ Run the app, and with any luck this should appear on your device or emulator:
 <img src="hello_world_screen1.png" height="400">
 
 Congratulations! You've built your first Cocoon.
+
+**Next: [Widgets](widgets.md)**
