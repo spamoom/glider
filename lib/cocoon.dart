@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:icons_helper/icons_helper.dart';
 import 'bottom_nav_scaffold.dart';
+import 'cocoon_form.dart';
 
 // A wrapper [Widget] containing a [GlobalKey] and state values
 class _CocoonStateful extends StatefulWidget {
@@ -192,6 +193,8 @@ class Cocoon extends StatelessWidget {
         return _buildDrawer(context, json, stateKey: stateKey);
       case 'fab':
         return _buildFab(context, json, stateKey: stateKey);
+      case 'form':
+        return CocoonForm(json);
       case 'hero':
         return _buildHero(context, json, stateKey: stateKey);
       case 'icon':
@@ -492,9 +495,11 @@ class Cocoon extends StatelessWidget {
       subtitle: json['subtitle'] != null
           ? Text(_valueFromState(json, 'subtitle', stateKey))
           : null,
-      leading: json['leading'] != null ? Cocoon(json['leading']) : null,
+      leading: json['leading'] != null
+          ? Icon(getIconGuessFavorMaterial(name: json['leading']))
+          : null,
       trailing: json['trailing'] != null ? Cocoon(json['trailing']) : null,
-      onTap: json['destination'] != null ? onTap : null,
+      onTap: onTap,
     );
   }
 
@@ -603,6 +608,17 @@ class Cocoon extends StatelessWidget {
       primaryColor: _colorFromHex(primary),
       accentColor: _colorFromHex(accent),
       brightness: dark == true ? Brightness.dark : Brightness.light,
+      inputDecorationTheme: InputDecorationTheme(
+        filled: json['input_theme']['filled'] == true,
+        border: json['input_theme']['outlined'] == true
+            ? OutlineInputBorder()
+            : UnderlineInputBorder(),
+      ),
+      buttonTheme: ButtonThemeData(
+        textTheme: ButtonTextTheme.primary,
+        buttonColor: _colorFromHex(primary),
+        layoutBehavior: ButtonBarLayoutBehavior.constrained,
+      ),
     );
   }
 
