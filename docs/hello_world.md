@@ -47,6 +47,6 @@ class _MyFirstCocoon extends StatelessWidget {
 
 Run the app, and with any luck this should appear on your device or emulator:
 
-![screenshot](hello_world_screen1.png)
+<img src="hello_world_screen1.png" height="400">
 
 Congratulations! You've built your first Cocoon.
