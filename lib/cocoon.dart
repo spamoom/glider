@@ -390,7 +390,7 @@ class Cocoon extends StatelessWidget {
     Map<String, dynamic> json,
   ) {
     return Divider(
-      indent: json['indent'],
+      indent: json['indent'] != null ? json['indent'] : 0.0,
     );
   }
 
@@ -465,7 +465,7 @@ class Cocoon extends StatelessWidget {
   }
 
   static Icon _buildIcon(BuildContext context, String icon) {
-    return Icon(getMaterialIcon(name: icon));
+    return Icon(getIconGuessFavorMaterial(name: icon));
   }
 
   // TODO IconButton
@@ -496,8 +496,7 @@ class Cocoon extends StatelessWidget {
           ? Text(_valueFromState(json, 'subtitle', stateKey))
           : null,
       leading: json['leading'] != null
-          ? Icon(getIconGuessFavorMaterial(
-              name: _valueFromState(json, 'leading', stateKey)))
+          ? Cocoon(_valueFromState(json, 'leading', stateKey))
           : null,
       trailing: json['trailing'] != null
           ? Cocoon(_valueFromState(json, 'trailing', stateKey))
