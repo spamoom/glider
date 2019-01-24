@@ -13,6 +13,7 @@
   * [Center](widgets/center.md)
   * [Circular Progress Indicator](widgets/circular_progress.md)
   * [Column](widgets/column.md)
+  * [Custom Widgets](widgets/custom_widgets.md)
   * [Divider](widgets/divider.md)
   * [Drawer](widgets/drawer.md)
   * [Floating Action Button](widgets/fab.md)
