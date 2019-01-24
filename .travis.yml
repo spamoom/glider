@@ -1,7 +1,5 @@
-language: dart
 os:
   - linux
-dist: xenial
 sudo: false
 addons:
   apt:
