@@ -90,7 +90,11 @@ class Cocoon extends StatelessWidget {
   ///
   /// If the endpoint returns an error, or there is no network connection, the [fallback] will be used.
   /// If no [fallback] is given, a [Widget] displaying an error message will be displayed.
-  static Widget appFromUrl(String url, {String fallback}) {
+  static Widget appFromUrl(
+    String url, {
+    String fallback,
+    Map<String, Widget> customWidgets: const {},
+  }) {
     return FutureBuilder(
       future: get(url),
       builder: (context, AsyncSnapshot<Response> snapshot) {
@@ -124,8 +128,11 @@ class Cocoon extends StatelessWidget {
   }
 
   /// Creates a [Cocoon] based on a JSON-formatted [String] definition.
-  static Widget appFromString(String json) {
-    return Cocoon(jsonDecode(json));
+  static Widget appFromString(
+    String json, {
+    Map<String, Widget> customWidgets: const {},
+  }) {
+    return Cocoon(jsonDecode(json), customWidgets: customWidgets);
   }
 
   static Widget _fromUrl(String url) {
