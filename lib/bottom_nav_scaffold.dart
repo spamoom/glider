@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:icons_helper/icons_helper.dart';
 import 'cocoon.dart';
-import 'dart:convert';
 
 class BottomNavScaffold extends StatefulWidget {
   final Map<String, dynamic> _json;
