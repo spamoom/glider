@@ -465,7 +465,7 @@ class Cocoon extends StatelessWidget {
   }
 
   static Icon _buildIcon(BuildContext context, String icon) {
-    return Icon(getMaterialIcon(name: icon));
+    return Icon(getIconGuessFavorMaterial(name: icon));
   }
 
   // TODO IconButton
