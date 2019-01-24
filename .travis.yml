@@ -1,5 +1,7 @@
+language: dart
 os:
   - linux
+dist: xenial
 sudo: false
 addons:
   apt:
@@ -18,7 +20,7 @@ jobs:
     - stage: "Test"
       script: ./flutter/bin/flutter test
     - stage: "Analyze"
-      script: ./flutter/bin/flutter analyze
+      script: ./flutter/bin/flutter analyze --no-current-package lib test
 cache:
   directories:
     - $HOME/.pub-cache
