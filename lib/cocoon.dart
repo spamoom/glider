@@ -193,6 +193,8 @@ class Cocoon extends StatelessWidget {
         return _buildDrawer(context, json, stateKey: stateKey);
       case 'fab':
         return _buildFab(context, json, stateKey: stateKey);
+      case 'flat_button':
+        return _buildFlatButton(context, json, stateKey: stateKey);
       case 'form':
         return CocoonForm(json);
       case 'hero':
@@ -208,18 +210,20 @@ class Cocoon extends StatelessWidget {
         return _buildListTile(context, json, stateKey: stateKey);
       case 'list_view':
         return _buildListView(context, json, stateKey: stateKey);
+      case 'outline_button':
+        return _buildOutlineButton(context, json, stateKey: stateKey);
       case 'padding':
         return _buildPadding(context, json, stateKey: stateKey);
       case 'sized_box':
         return _buildSizedBox(context, json, stateKey: stateKey);
+      case 'raised_button':
+        return _buildRaisedButton(context, json, stateKey: stateKey);
       case 'row':
         return _buildRow(context, json, stateKey: stateKey);
       case 'text':
         return _buildText(context, json, stateKey: stateKey);
       case 'tooltip':
         return _buildTooltip(context, json);
-      case 'button':
-        return _buildButton(context, json, stateKey: stateKey);
       default:
         return Center();
     }
@@ -408,7 +412,18 @@ class Cocoon extends StatelessWidget {
 
   // TODO Dropdown button
 
-  // TODO Flat button
+  static FlatButton _buildFlatButton(
+    BuildContext context,
+    Map<String, dynamic> json, {
+    GlobalKey<_CocoonState> stateKey,
+  }) {
+    Function onTap = _onTap(context, json, stateKey);
+
+    return FlatButton(
+      child: Text(_valueFromState(json, 'text', stateKey)),
+      onPressed: onTap,
+    );
+  }
 
   static FloatingActionButton _buildFab(
     BuildContext context,
@@ -429,19 +444,6 @@ class Cocoon extends StatelessWidget {
             child: _buildIcon(context, icon),
             onPressed: onTap,
           );
-  }
-
-  static RaisedButton _buildButton(
-    BuildContext context,
-    Map<String, dynamic> json, {
-    GlobalKey<_CocoonState> stateKey,
-  }) {
-    Function onTap = _onTap(context, json, stateKey);
-
-    return RaisedButton(
-      child: Text(_valueFromState(json, 'label', stateKey)),
-      onPressed: onTap,
-    );
   }
 
   // TODO Form
@@ -520,6 +522,19 @@ class Cocoon extends StatelessWidget {
     return ListView(children: children);
   }
 
+  static OutlineButton _buildOutlineButton(
+    BuildContext context,
+    Map<String, dynamic> json, {
+    GlobalKey<_CocoonState> stateKey,
+  }) {
+    Function onTap = _onTap(context, json, stateKey);
+
+    return OutlineButton(
+      child: Text(_valueFromState(json, 'text', stateKey)),
+      onPressed: onTap,
+    );
+  }
+
   static Padding _buildPadding(
     BuildContext context,
     Map<String, dynamic> json, {
@@ -550,7 +565,18 @@ class Cocoon extends StatelessWidget {
 
   // TODO Radio
 
-  // TODO RaisedButton
+  static RaisedButton _buildRaisedButton(
+    BuildContext context,
+    Map<String, dynamic> json, {
+    GlobalKey<_CocoonState> stateKey,
+  }) {
+    Function onTap = _onTap(context, json, stateKey);
+
+    return RaisedButton(
+      child: Text(_valueFromState(json, 'text', stateKey)),
+      onPressed: onTap,
+    );
+  }
 
   // TODO RefreshIndicator
 
