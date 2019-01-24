@@ -7,7 +7,7 @@ void main() {
     await tester.pumpWidget(MaterialApp(
       home: Cocoon({
         "type": "card",
-        "elevation": 1.0,
+        "elevation": 2.0,
         "child": {
           "type": "text",
           "text": "Hello",
@@ -17,7 +17,7 @@ void main() {
 
     Card card = tester.widget(find.byType(Card));
 
-    expect(card.elevation, equals(1.0));
+    expect(card.elevation, equals(2.0));
     expect(
       find.descendant(
         of: find.byWidget(card),
