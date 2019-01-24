@@ -28,9 +28,16 @@ class _CocoonStateful extends StatefulWidget {
 class _CocoonState extends State<_CocoonStateful> {
   final GlobalKey<_CocoonState> globalKey;
   final Map<String, dynamic> _json;
+  Map<String, Widget> _customWidgets = {};
   Map<String, dynamic> _state;
 
-  _CocoonState(this.globalKey, this._json);
+  _CocoonState(
+    this.globalKey,
+    this._json, {
+    Map<String, Widget> customWidgets: const {},
+  }) {
+    this._customWidgets = customWidgets;
+  }
 
   @override
   void initState() {
@@ -41,7 +48,7 @@ class _CocoonState extends State<_CocoonStateful> {
 
   @override
   Widget build(BuildContext context) {
-    return Cocoon._buildWidget(context, _json, globalKey);
+    return Cocoon._buildWidget(context, _json, globalKey, _customWidgets);
   }
 
   void updateStateValue(String key, dynamic value) {
@@ -63,10 +70,16 @@ class _CocoonState extends State<_CocoonStateful> {
 class Cocoon extends StatelessWidget {
   final Map<String, dynamic> _json;
   final GlobalKey<_CocoonState> _stateKey;
+  final Map<String, Widget> _customWidgets;
 
   /// Creates a [Cocoon] based on the given JSON-formatted [Map].
-  Cocoon(this._json, {GlobalKey<_CocoonState> stateKey, Key key})
-      : this._stateKey = stateKey,
+  Cocoon(
+    this._json, {
+    GlobalKey<_CocoonState> stateKey,
+    Map<String, Widget> customWidgets: const {},
+    Key key,
+  })  : this._stateKey = stateKey,
+        this._customWidgets = customWidgets,
         super(key: key);
 
   /// Creates a [Cocoon] based on the given API endpoint, with an optional [fallback] parameter.
@@ -158,70 +171,78 @@ class Cocoon extends StatelessWidget {
       return _CocoonStateful(_json, GlobalKey());
     }
 
-    return _buildWidget(context, _json, _stateKey);
+    return _buildWidget(context, _json, _stateKey, _customWidgets);
   }
 
-  static Widget _buildWidget(BuildContext context, Map<String, dynamic> json,
-      GlobalKey<_CocoonState> stateKey) {
+  static Widget _buildWidget(
+    BuildContext context,
+    Map<String, dynamic> json,
+    GlobalKey<_CocoonState> stateKey,
+    Map<String, Widget> customWidgets,
+  ) {
     final String type = json['type'];
-    switch (type) {
-      case 'url':
-        return Cocoon._fromUrl(json['url']);
-      case 'app':
-        return _buildApp(context, json, stateKey: stateKey);
-      case 'scaffold':
-        return _buildScaffold(context, json, stateKey: stateKey);
-      case 'bottom_nav_scaffold':
-        return _buildBottomNavScaffold(context, json);
-      case 'app_bar':
-        return _buildAppBar(context, json, stateKey: stateKey);
-      case 'aspect_ratio':
-        return _buildAspectRatio(context, json, stateKey: stateKey);
-      case 'button_bar':
-        return _buildButtonBar(context, json, stateKey: stateKey);
-      case 'card':
-        return _buildCard(context, json, stateKey: stateKey);
-      case 'center':
-        return _buildCenter(context, json, stateKey: stateKey);
-      case 'circular_progress':
-        return _buildCircularProgressIndicator(context, json);
-      case 'column':
-        return _buildColumn(context, json, stateKey: stateKey);
-      case 'divider':
-        return _buildDivider(context, json);
-      case 'drawer':
-        return _buildDrawer(context, json, stateKey: stateKey);
-      case 'fab':
-        return _buildFab(context, json, stateKey: stateKey);
-      case 'form':
-        return CocoonForm(json);
-      case 'hero':
-        return _buildHero(context, json, stateKey: stateKey);
-      case 'icon':
-        String icon = _valueFromState(json, "icon", stateKey);
-        return _buildIcon(context, icon);
-      case 'image':
-        return _buildImage(context, json);
-      case 'linear_progress':
-        return _buildLinearProgressIndiator(context, json);
-      case 'list_tile':
-        return _buildListTile(context, json, stateKey: stateKey);
-      case 'list_view':
-        return _buildListView(context, json, stateKey: stateKey);
-      case 'padding':
-        return _buildPadding(context, json, stateKey: stateKey);
-      case 'sized_box':
-        return _buildSizedBox(context, json, stateKey: stateKey);
-      case 'row':
-        return _buildRow(context, json, stateKey: stateKey);
-      case 'text':
-        return _buildText(context, json, stateKey: stateKey);
-      case 'tooltip':
-        return _buildTooltip(context, json);
-      case 'button':
-        return _buildButton(context, json, stateKey: stateKey);
-      default:
-        return Center();
+    if (customWidgets.containsKey(type)) {
+      return customWidgets[type];
+    } else {
+      switch (type) {
+        case 'url':
+          return Cocoon._fromUrl(json['url']);
+        case 'app':
+          return _buildApp(context, json, stateKey: stateKey);
+        case 'scaffold':
+          return _buildScaffold(context, json, stateKey: stateKey);
+        case 'bottom_nav_scaffold':
+          return _buildBottomNavScaffold(context, json);
+        case 'app_bar':
+          return _buildAppBar(context, json, stateKey: stateKey);
+        case 'aspect_ratio':
+          return _buildAspectRatio(context, json, stateKey: stateKey);
+        case 'button_bar':
+          return _buildButtonBar(context, json, stateKey: stateKey);
+        case 'card':
+          return _buildCard(context, json, stateKey: stateKey);
+        case 'center':
+          return _buildCenter(context, json, stateKey: stateKey);
+        case 'circular_progress':
+          return _buildCircularProgressIndicator(context, json);
+        case 'column':
+          return _buildColumn(context, json, stateKey: stateKey);
+        case 'divider':
+          return _buildDivider(context, json);
+        case 'drawer':
+          return _buildDrawer(context, json, stateKey: stateKey);
+        case 'fab':
+          return _buildFab(context, json, stateKey: stateKey);
+        case 'form':
+          return CocoonForm(json);
+        case 'hero':
+          return _buildHero(context, json, stateKey: stateKey);
+        case 'icon':
+          String icon = _valueFromState(json, "icon", stateKey);
+          return _buildIcon(context, icon);
+        case 'image':
+          return _buildImage(context, json);
+        case 'linear_progress':
+          return _buildLinearProgressIndiator(context, json);
+        case 'list_tile':
+          return _buildListTile(context, json, stateKey: stateKey);
+        case 'list_view':
+          return _buildListView(context, json, stateKey: stateKey);
+        case 'padding':
+          return _buildPadding(context, json, stateKey: stateKey);
+        case 'sized_box':
+          return _buildSizedBox(context, json, stateKey: stateKey);
+        case 'row':
+          return _buildRow(context, json, stateKey: stateKey);
+        case 'text':
+          return _buildText(context, json, stateKey: stateKey);
+        case 'tooltip':
+          return _buildTooltip(context, json);
+        case 'button':
+          return _buildButton(context, json, stateKey: stateKey);
+        default:
+          return Center();
+      }
     }
   }
 
