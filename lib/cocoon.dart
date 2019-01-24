@@ -308,8 +308,6 @@ class Cocoon extends StatelessWidget {
     );
   }
 
-  // TODO Bottom navigation bar
-
   static ButtonBar _buildButtonBar(
     BuildContext context,
     Map<String, dynamic> json, {
@@ -360,10 +358,6 @@ class Cocoon extends StatelessWidget {
     );
   }
 
-  // TODO Checkbox
-
-  // TODO Chip
-
   static CircularProgressIndicator _buildCircularProgressIndicator(
     BuildContext context,
     Map<String, dynamic> json,
@@ -406,10 +400,6 @@ class Cocoon extends StatelessWidget {
     ));
   }
 
-  // TODO Dropdown button
-
-  // TODO Flat button
-
   static FloatingActionButton _buildFab(
     BuildContext context,
     Map<String, dynamic> json, {
@@ -444,12 +434,6 @@ class Cocoon extends StatelessWidget {
     );
   }
 
-  // TODO Form
-
-  // TODO FormField
-
-  // TODO GridView
-
   static Hero _buildHero(
     BuildContext context,
     Map<String, dynamic> json, {
@@ -467,8 +451,6 @@ class Cocoon extends StatelessWidget {
   static Icon _buildIcon(BuildContext context, String icon) {
     return Icon(getIconGuessFavorMaterial(name: icon));
   }
-
-  // TODO IconButton
 
   static Image _buildImage(BuildContext context, Map<String, dynamic> json) {
     return Image.network(json['src']);
@@ -546,14 +528,6 @@ class Cocoon extends StatelessWidget {
                   ));
   }
 
-  // TODO PopupMenuButton
-
-  // TODO Radio
-
-  // TODO RaisedButton
-
-  // TODO RefreshIndicator
-
   static Row _buildRow(
     BuildContext context,
     Map<String, dynamic> json, {
@@ -587,18 +561,6 @@ class Cocoon extends StatelessWidget {
           : null,
     );
   }
-
-  // TODO Slider
-
-  // TODO SnackBar
-
-  // TODO Switch
-
-  // TODO TabBar
-
-  // TODO TabBarView
-
-  // TODO TextField
 
   static ThemeData _buildTheme(BuildContext context, Map<String, dynamic> json,
       {GlobalKey<_CocoonState> stateKey}) {
