@@ -8,7 +8,7 @@ addons:
     packages:
       - libstdc++6
       - fonts-droid
-before_script:
+install:
   - git clone https://github.com/flutter/flutter.git -b stable
   - ./flutter/bin/flutter doctor
 script:
