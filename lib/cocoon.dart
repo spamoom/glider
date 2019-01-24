@@ -496,8 +496,7 @@ class Cocoon extends StatelessWidget {
           ? Text(_valueFromState(json, 'subtitle', stateKey))
           : null,
       leading: json['leading'] != null
-          ? Icon(getIconGuessFavorMaterial(
-              name: _valueFromState(json, 'leading', stateKey)))
+          ? Cocoon(_valueFromState(json, 'leading', stateKey))
           : null,
       trailing: json['trailing'] != null
           ? Cocoon(_valueFromState(json, 'trailing', stateKey))
