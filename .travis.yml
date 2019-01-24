@@ -15,7 +15,7 @@ script:
   - ./flutter/bin/flutter test
 jobs:
   include:
-    - stage: "Tests"
+    - stage: "Test"
       script: ./flutter/bin/flutter test
     - stage: "Analyze"
       script: ./flutter/bin/flutter analyze
