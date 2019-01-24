@@ -390,7 +390,7 @@ class Cocoon extends StatelessWidget {
     Map<String, dynamic> json,
   ) {
     return Divider(
-      indent: json['indent'],
+      indent: json['indent'] != null ? json['indent'] : 0.0,
     );
   }
 
