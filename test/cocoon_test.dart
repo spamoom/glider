@@ -54,7 +54,8 @@ void main() {
     expect(aspectRatio.aspectRatio, equals(1.7));
   });
 
-  testWidgets('bottom navigation test', (WidgetTester tester) async {
+  testWidgets('bottom navigation tab switching test',
+      (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
       home: Cocoon({
         "type": "bottom_nav_scaffold",
