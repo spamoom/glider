@@ -13,6 +13,12 @@ install:
   - ./flutter/bin/flutter doctor
 script:
   - ./flutter/bin/flutter test
+jobs:
+  include:
+    - stage: "Tests"
+      script: ./flutter/bin/flutter test
+    - stage: "Analyze"
+      script: ./flutter/bin/flutter analyze
 cache:
   directories:
     - $HOME/.pub-cache
