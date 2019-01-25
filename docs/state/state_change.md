@@ -1,6 +1,6 @@
 # State Change
 
-A State Change can be used along with a `button` to change values in the [`state`](state.md) of a widgets closest, [`state`](state.md) holding parent.
+A State Change can be used along with a `button` to change values in the [`state`](state.md) of a widgets closest, [`state`](state.md) holding ancestor.
 You can create a `state_change` like this:
 
 ```json
