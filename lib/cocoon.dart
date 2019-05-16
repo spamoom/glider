@@ -6,6 +6,7 @@ library cocoon;
 
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:icons_helper/icons_helper.dart';
@@ -68,7 +69,7 @@ class _CocoonState extends State<_CocoonStateful> {
 
 /// A [Widget] based on a JSON-formatted definition.
 class Cocoon extends StatelessWidget {
-  final Map<String, dynamic> _json;
+  final Map _json;
   final GlobalKey<_CocoonState> _stateKey;
   final Map<String, Widget> _customWidgets;
 
@@ -135,6 +136,45 @@ class Cocoon extends StatelessWidget {
     return Cocoon(jsonDecode(json), customWidgets: customWidgets);
   }
 
+  /// Creates a [Cocoon] based on a definition provided by a Cloud Firestore [DocumentReference].
+  ///
+  /// This widget will automatically update as the document is changed in Cloud Firestore.
+  static Widget appFromDocumentReference(
+    DocumentReference ref,
+    String fallback,
+  ) {
+    return StreamBuilder<DocumentSnapshot>(
+      stream: ref.snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return fallback != null
+              ? Cocoon.appFromString(fallback)
+              : Scaffold(
+                  body: Center(
+                    child: Text(
+                      snapshot.hasError
+                          ? snapshot.error.toString()
+                          : 'An error occurred',
+                    ),
+                  ),
+                );
+        } else if (snapshot.hasData) {
+          final Map<String, dynamic> json = snapshot.data.data;
+          if (json['type'] != 'app' && json['type'] != 'firestore_ref') {
+            throw Exception("The definition does not define an app widget.");
+          }
+          return Cocoon.appFromString(jsonEncode(json));
+        } else {
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      },
+    );
+  }
+
   static Widget _fromUrl(String url) {
     return FutureBuilder(
       future: get(url),
@@ -169,6 +209,22 @@ class Cocoon extends StatelessWidget {
     );
   }
 
+  static Widget _fromDocumentReference(DocumentReference ref) {
+    return StreamBuilder<DocumentSnapshot>(
+      stream: ref.snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Center(child: Text("An error occurred"));
+        } else if (snapshot.hasData) {
+          final Map<String, dynamic> json = snapshot.data.data;
+          return Cocoon.appFromString(jsonEncode(json));
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     print(_json);
@@ -178,7 +234,12 @@ class Cocoon extends StatelessWidget {
       return _CocoonStateful(_json, GlobalKey());
     }
 
-    return _buildWidget(context, _json, _stateKey, _customWidgets);
+    return _buildWidget(
+      context,
+      Map<String, dynamic>.from(_json),
+      _stateKey,
+      _customWidgets,
+    );
   }
 
   static Widget _buildWidget(
@@ -194,6 +255,10 @@ class Cocoon extends StatelessWidget {
       switch (type) {
         case 'url':
           return Cocoon._fromUrl(json['url']);
+        case 'firestore_ref':
+          print(json['ref']);
+          return Cocoon._fromDocumentReference(
+              Firestore.instance.document(json['ref']));
         case 'app':
           return _buildApp(context, json, stateKey: stateKey);
         case 'scaffold':
