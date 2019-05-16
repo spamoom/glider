@@ -1,6 +1,6 @@
 name: cocoon
-description: Create a Flutter app based on a JSON API
-version: 0.0.1
+description: Server-side rendering for mobile apps, powered by Flutter.
+version: 0.0.2
 author: Peter Bryant <peter.bryant@netsells.co.uk>
 homepage: https://github.com/netsells/cocoon
 
