@@ -33,6 +33,7 @@
   * [Text Button](widgets/text_button.md)
   * [Tooltip](widgets/tooltip.md)
   * [URL](widgets/url.md)
+  * [Firestore Reference](widgets/firestore_reference.md)
 * [Forms](forms/README.md)
   * [Form Widget](forms/forms.md)
   * [Form Fields](forms/form_fields.md)
@@ -40,3 +41,4 @@
 * [State](state/README.md)
   * [Widget State](state/state.md)
   * [State Change](state/state_change.md)
+* [Remote Definitions](remote_definitions.md)
