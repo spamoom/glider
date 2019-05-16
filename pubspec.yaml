@@ -1,20 +1,20 @@
 name: cocoon
-description: Create a Flutter app based on a JSON API
-version: 0.0.1
+description: Server-side rendering for mobile apps, powered by Flutter.
+version: 0.0.2
 author: Peter Bryant <peter.bryant@netsells.co.uk>
 homepage: https://github.com/netsells/cocoon
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   http: ^0.12.0
+  cloud_firestore: ^0.11.0+2
   icons_helper:
     git:
       url: git://github.com/sjmcdowall/icons_helper
-
 
 dev_dependencies:
   flutter_test:
@@ -25,7 +25,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
   # To add assets to your package, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg
@@ -36,7 +35,6 @@ flutter:
   #
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
-
   # To add custom fonts to your package, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
