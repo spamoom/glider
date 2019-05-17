@@ -623,18 +623,18 @@ class Cocoon extends StatelessWidget {
           stateKey: stateKey,
         ),
         padding: json['padding'] != null
-            ? EdgeInsets.all(json['padding'])
+            ? EdgeInsets.all(json['padding'].toDouble())
             : json['padding_vertical'] != null &&
                     json['padding_horizontal'] != null
                 ? EdgeInsets.symmetric(
-                    vertical: json['padding_vertical'],
-                    horizontal: json['padding_horizontal'],
+                    vertical: json['padding_vertical'].toDouble(),
+                    horizontal: json['padding_horizontal'].toDouble(),
                   )
                 : EdgeInsets.fromLTRB(
-                    json['padding_left'],
-                    json['padding_top'],
-                    json['padding_right'],
-                    json['padding_bottom'],
+                    json['padding_left'].toDouble(),
+                    json['padding_top'].toDouble(),
+                    json['padding_right'].toDouble(),
+                    json['padding_bottom'].toDouble(),
                   ));
   }
 
