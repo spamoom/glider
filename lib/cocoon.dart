@@ -7,6 +7,7 @@ library cocoon;
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:icons_helper/icons_helper.dart';
@@ -735,7 +736,17 @@ class Cocoon extends StatelessWidget {
     Map<String, dynamic> json,
     GlobalKey<_CocoonState> stateKey,
   ) {
-    if (json.containsKey('destination')) {
+    if (json.containsKey('cloud_function')) {
+      return () async {
+        await CloudFunctions.instance
+            .getHttpsCallable(functionName: json['cloud_function'])
+            .call();
+        if (json.containsKey('destination')) {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => Cocoon(json['destination'])));
+        }
+      };
+    } else if (json.containsKey('destination')) {
       return () {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Cocoon(json['destination']),
