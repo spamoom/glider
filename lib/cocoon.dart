@@ -7,6 +7,7 @@ library cocoon;
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:icons_helper/icons_helper.dart';
@@ -735,7 +736,21 @@ class Cocoon extends StatelessWidget {
     Map<String, dynamic> json,
     GlobalKey<_CocoonState> stateKey,
   ) {
-    if (json.containsKey('destination')) {
+    if (json.containsKey('cloud_function')) {
+      return () async {
+        try {
+          await CloudFunctions.instance
+              .getHttpsCallable(functionName: json['cloud_function'])
+              .call();
+          if (json.containsKey('destination')) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => Cocoon(json['destination'])));
+          }
+        } catch (e) {
+          Scaffold.of(context).showSnackBar(SnackBar(content: Text(e.message)));
+        }
+      };
+    } else if (json.containsKey('destination')) {
       return () {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Cocoon(json['destination']),
@@ -751,7 +766,7 @@ class Cocoon extends StatelessWidget {
         }
       };
     }
-    return () {};
+    return null;
   }
 
   // Get the value of the given field from the state if present
