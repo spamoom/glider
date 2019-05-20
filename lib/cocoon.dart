@@ -738,12 +738,16 @@ class Cocoon extends StatelessWidget {
   ) {
     if (json.containsKey('cloud_function')) {
       return () async {
-        await CloudFunctions.instance
-            .getHttpsCallable(functionName: json['cloud_function'])
-            .call();
-        if (json.containsKey('destination')) {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => Cocoon(json['destination'])));
+        try {
+          await CloudFunctions.instance
+              .getHttpsCallable(functionName: json['cloud_function'])
+              .call();
+          if (json.containsKey('destination')) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => Cocoon(json['destination'])));
+          }
+        } catch (e) {
+          Scaffold.of(context).showSnackBar(SnackBar(content: Text(e.message)));
         }
       };
     } else if (json.containsKey('destination')) {
@@ -762,7 +766,7 @@ class Cocoon extends StatelessWidget {
         }
       };
     }
-    return () {};
+    return null;
   }
 
   // Get the value of the given field from the state if present
