@@ -5,7 +5,7 @@ Cocoon is two things:
 1. A schema for defining the structure and behavior of mobile apps using JSON
 2. A Flutter package which allows developers to create mobile applications using Cocoon definitions
 
-## Why did we build Cocoon?
+## Why did we build Cocoon?
 
 In 2018, the mobile dev community fell in love with [Flutter](https://flutter.io/). It significantly reduced the workload involved in creating a beautiful cross-platform mobile app.
 
@@ -20,7 +20,7 @@ A perk of this architecture is that Cocoon apps can retrieve their definitions o
 1. The actual Flutter project for a Cocoon app is almost impossibly small, simply instantiating a Cocoon using a URL
 2. App updates can be performed by back-end developers without any need to publish a new version on the App Store/Play Store
 
-## Limitations
+## Limitations
 
 Cocoon is designed to be both minimal and opinionated. Cocoon apps follow the [Material Design](https://material.io/) guidelines as closely as possible, and we provide limited options for theming.
 
