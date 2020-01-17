@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('app test', (WidgetTester tester) async {
-    await tester.pumpWidget(Glider({
+    await tester.pumpWidget(const Glider(<String, dynamic>{
       "type": "app",
       "title": "Test",
       "theme": {
@@ -18,7 +18,7 @@ void main() {
       }
     }));
 
-    MaterialApp app = tester.widget(find.byType(MaterialApp));
+    final MaterialApp app = tester.widget(find.byType(MaterialApp));
     expect(app.title, equals("Test"));
     expect(app.theme.primaryColor, equals(Colors.white));
     expect(app.theme.accentColor, equals(Colors.black));

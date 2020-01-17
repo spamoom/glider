@@ -4,8 +4,8 @@ import 'package:glider/glider.dart';
 
 void main() {
   testWidgets('linear progress indicator test', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Glider({
+    await tester.pumpWidget(const MaterialApp(
+      home: Glider(<String, dynamic>{
         "type": "linear_progress",
       }),
     ));

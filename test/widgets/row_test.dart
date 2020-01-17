@@ -4,8 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('row test', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Glider({
+    await tester.pumpWidget(const MaterialApp(
+      home: Glider(<String, dynamic>{
         "type": "row",
         "children": [
           {"type": "text", "text": "1"},

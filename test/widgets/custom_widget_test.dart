@@ -4,16 +4,18 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('custom widget test', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Glider(
-        {
-          "type": "my_custom_widget",
-        },
-        customWidgets: {
-          "my_custom_widget": Text("Hello"),
-        },
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Glider(
+          <String, dynamic>{
+            "type": "my_custom_widget",
+          },
+          customWidgets: {
+            "my_custom_widget": Text("Hello"),
+          },
+        ),
       ),
-    ));
+    );
 
     expect(find.text("Hello"), findsOneWidget);
   });

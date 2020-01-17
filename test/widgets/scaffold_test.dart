@@ -4,8 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('scaffold app bar test', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Glider({
+    await tester.pumpWidget(const MaterialApp(
+      home: Glider(<String, dynamic>{
         "type": "scaffold",
         "app_bar": {
           "type": "app_bar",
@@ -14,14 +14,14 @@ void main() {
       }),
     ));
 
-    AppBar appBar = tester.widget(find.byType(AppBar));
-    Text title = appBar.title;
+    final AppBar appBar = tester.widget(find.byType(AppBar));
+    final Text title = appBar.title as Text;
     expect(title.data, "App Bar");
   });
 
   testWidgets('scaffold fab test', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Glider({
+    await tester.pumpWidget(const MaterialApp(
+      home: Glider(<String, dynamic>{
         "type": "scaffold",
         "fab": {
           "type": "fab",
@@ -34,14 +34,15 @@ void main() {
       }),
     ));
 
-    FloatingActionButton fab = tester.widget(find.byType(FloatingActionButton));
+    final FloatingActionButton fab =
+        tester.widget(find.byType(FloatingActionButton));
     expect(fab.isExtended, isTrue);
-    Icon icon = tester.widget(find.descendant(
+    final Icon icon = tester.widget(find.descendant(
       of: find.byWidget(fab),
       matching: find.byIcon(Icons.alarm),
     ));
     expect(icon.icon, equals(Icons.alarm));
-    Text text = tester.widget(find.descendant(
+    final Text text = tester.widget(find.descendant(
       of: find.byWidget(fab),
       matching: find.text("New Alarm"),
     ));
@@ -49,8 +50,8 @@ void main() {
   });
 
   testWidgets('scaffold drawer test', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Glider({
+    await tester.pumpWidget(const MaterialApp(
+      home: Glider(<String, dynamic>{
         "type": "scaffold",
         "app_bar": {
           "type": "app_bar",

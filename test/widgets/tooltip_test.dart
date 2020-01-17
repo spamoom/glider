@@ -4,8 +4,8 @@ import 'package:glider/glider.dart';
 
 void main() {
   testWidgets('tooltip test', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Glider({
+    await tester.pumpWidget(const MaterialApp(
+      home: Glider(<String, dynamic>{
         "type": "tooltip",
         "message": "A tooltip",
         "child": {

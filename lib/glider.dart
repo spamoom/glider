@@ -19,7 +19,7 @@ class _GliderStateful extends StatefulWidget {
   final GlobalKey<_GliderState> globalKey;
   final Map<String, dynamic> _json;
 
-  _GliderStateful(this._json, this.globalKey) : super(key: globalKey);
+  const _GliderStateful(this._json, this.globalKey) : super(key: globalKey);
 
   @override
   State<StatefulWidget> createState() {
@@ -36,7 +36,7 @@ class _GliderState extends State<_GliderStateful> {
   _GliderState(
     this.globalKey,
     this._json, {
-    Map<String, Widget> customWidgets: const {},
+    Map<String, Widget> customWidgets = const {},
   }) {
     this._customWidgets = customWidgets;
   }
@@ -45,7 +45,7 @@ class _GliderState extends State<_GliderStateful> {
   void initState() {
     super.initState();
 
-    _state = _json['state'];
+    _state = _json['state'] as Map<String, dynamic>;
   }
 
   @override
@@ -61,7 +61,7 @@ class _GliderState extends State<_GliderStateful> {
 
   void updateState(Map<String, dynamic> values) {
     setState(() {
-      values.forEach((key, value) {
+      values.forEach((key, dynamic value) {
         _state[key] = value;
       });
     });
@@ -75,10 +75,10 @@ class Glider extends StatelessWidget {
   final Map<String, Widget> _customWidgets;
 
   /// Creates a [Glider] based on the given JSON-formatted [Map].
-  Glider(
+  const Glider(
     this._json, {
     GlobalKey<_GliderState> stateKey,
-    Map<String, Widget> customWidgets: const {},
+    Map<String, Widget> customWidgets = const {},
     Key key,
   })  : this._stateKey = stateKey,
         this._customWidgets = customWidgets,
@@ -95,7 +95,7 @@ class Glider extends StatelessWidget {
   static Widget appFromUrl(
     String url, {
     String fallback,
-    Map<String, Widget> customWidgets: const {},
+    Map<String, Widget> customWidgets = const {},
   }) {
     return FutureBuilder(
       future: get(url),
@@ -118,7 +118,7 @@ class Glider extends StatelessWidget {
             );
           }
         } else {
-          return MaterialApp(
+          return const MaterialApp(
             home: Center(
               child: CircularProgressIndicator(),
             ),
@@ -132,9 +132,9 @@ class Glider extends StatelessWidget {
   /// Creates a [Glider] based on a JSON-formatted [String] definition.
   static Widget appFromString(
     String json, {
-    Map<String, Widget> customWidgets: const {},
+    Map<String, Widget> customWidgets = const {},
   }) {
-    return Glider(jsonDecode(json), customWidgets: customWidgets);
+    return Glider(jsonDecode(json) as Map, customWidgets: customWidgets);
   }
 
   /// Creates a [Glider] based on a definition provided by a Cloud Firestore [DocumentReference].
@@ -166,7 +166,7 @@ class Glider extends StatelessWidget {
           }
           return Glider.appFromString(jsonEncode(json));
         } else {
-          return Scaffold(
+          return const Scaffold(
             body: Center(
               child: CircularProgressIndicator(),
             ),
@@ -182,7 +182,7 @@ class Glider extends StatelessWidget {
       builder: (context, AsyncSnapshot<Response> snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data.statusCode == 200) {
-            final json = jsonDecode(snapshot.data.body);
+            final json = jsonDecode(snapshot.data.body) as Map;
             if (json['type'] != 'scaffold') {
               throw Exception(
                   "Only Scaffold widgets can be retrieved from URLs");
@@ -200,7 +200,7 @@ class Glider extends StatelessWidget {
             );
           }
         } else {
-          return Scaffold(
+          return const Scaffold(
             body: Center(
               child: CircularProgressIndicator(),
             ),
@@ -215,12 +215,12 @@ class Glider extends StatelessWidget {
       stream: ref.snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Center(child: Text("An error occurred"));
+          return const Center(child: Text("An error occurred"));
         } else if (snapshot.hasData) {
           final Map<String, dynamic> json = snapshot.data.data;
           return Glider.appFromString(jsonEncode(json));
         } else {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
       },
     );
@@ -230,7 +230,7 @@ class Glider extends StatelessWidget {
   Widget build(BuildContext context) {
     // If this widget contains a state object, wrap with [_GliderStateful]
     if (_json.containsKey("state")) {
-      return _GliderStateful(_json, GlobalKey());
+      return _GliderStateful(_json as Map<String, dynamic>, GlobalKey());
     }
 
     return _buildWidget(
@@ -247,16 +247,16 @@ class Glider extends StatelessWidget {
     GlobalKey<_GliderState> stateKey,
     Map<String, Widget> customWidgets,
   ) {
-    final String type = json['type'];
+    final String type = json['type'] as String;
     if (customWidgets.containsKey(type)) {
       return customWidgets[type];
     } else {
       switch (type) {
         case 'url':
-          return Glider._fromUrl(json['url']);
+          return Glider._fromUrl(json['url'] as String);
         case 'firestore_ref':
           return Glider._fromDocumentReference(
-              Firestore.instance.document(json['ref']));
+              Firestore.instance.document(json['ref'] as String));
         case 'app':
           return _buildApp(context, json, stateKey: stateKey);
         case 'scaffold':
@@ -290,7 +290,7 @@ class Glider extends StatelessWidget {
         case 'hero':
           return _buildHero(context, json, stateKey: stateKey);
         case 'icon':
-          String icon = _valueFromState(json, "icon", stateKey);
+          final String icon = _valueFromState(json, "icon", stateKey) as String;
           return _buildIcon(context, icon);
         case 'image':
           return _buildImage(context, json);
@@ -315,21 +315,28 @@ class Glider extends StatelessWidget {
         case 'tooltip':
           return _buildTooltip(context, json);
         default:
-          return Center();
+          return const Center();
       }
     }
   }
 
-  static MaterialApp _buildApp(BuildContext context, Map<String, dynamic> json,
-      {GlobalKey<_GliderState> stateKey}) {
+  static MaterialApp _buildApp(
+    BuildContext context,
+    Map<String, dynamic> json, {
+    GlobalKey<_GliderState> stateKey,
+  }) {
     return MaterialApp(
       home: Glider(
-        json['home'],
+        json['home'] as Map,
         stateKey: stateKey,
       ),
-      title: _valueFromState(json, 'title', stateKey),
-      theme: _buildTheme(context, json['theme'], stateKey: stateKey),
-      debugShowCheckedModeBanner: json["debug"] != null ? json["debug"] : false,
+      title: _valueFromState(json, 'title', stateKey) as String,
+      theme: _buildTheme(
+        context,
+        json['theme'] as Map<String, dynamic>,
+        stateKey: stateKey,
+      ),
+      debugShowCheckedModeBanner: json["debug"] as bool ?? false,
     );
   }
 
@@ -340,35 +347,39 @@ class Glider extends StatelessWidget {
   }) {
     return Scaffold(
       appBar: json['app_bar'] != null
-          ? _buildAppBar(context, json['app_bar'], stateKey: stateKey)
+          ? _buildAppBar(
+              context,
+              json['app_bar'] as Map<String, dynamic>,
+              stateKey: stateKey,
+            )
           : null,
       body: json['body'] != null
           ? Glider(
-              json['body'],
+              json['body'] as Map,
               stateKey: stateKey,
             )
           : null,
       floatingActionButton: json['fab'] != null
           ? Glider(
-              json['fab'],
+              json['fab'] as Map,
               stateKey: stateKey,
             )
           : null,
       drawer: json['drawer'] != null
           ? Glider(
-              json['drawer'],
+              json['drawer'] as Map,
               stateKey: stateKey,
             )
           : null,
       bottomNavigationBar: json['bottom_bar'] != null
           ? Glider(
-              json['bottom_bar'],
+              json['bottom_bar'] as Map,
               stateKey: stateKey,
             )
           : null,
       bottomSheet: json['bottom_sheet'] != null
           ? Glider(
-              json['bottom_sheet'],
+              json['bottom_sheet'] as Map,
               stateKey: stateKey,
             )
           : null,
@@ -388,7 +399,7 @@ class Glider extends StatelessWidget {
     GlobalKey<_GliderState> stateKey,
   }) {
     return AppBar(
-      title: Text(_valueFromState(json, "title", stateKey)),
+      title: Text(_valueFromState(json, "title", stateKey) as String),
     );
   }
 
@@ -398,8 +409,8 @@ class Glider extends StatelessWidget {
     GlobalKey<_GliderState> stateKey,
   }) {
     return AspectRatio(
-      aspectRatio: json['aspect_ratio'],
-      child: Glider(json['child'], stateKey: stateKey),
+      aspectRatio: json['aspect_ratio'] as double,
+      child: Glider(json['child'] as Map, stateKey: stateKey),
     );
   }
 
@@ -408,9 +419,9 @@ class Glider extends StatelessWidget {
     Map<String, dynamic> json, {
     GlobalKey<_GliderState> stateKey,
   }) {
-    final List<dynamic> buttonsJson = json['buttons'];
-    final List<Widget> buttons = buttonsJson
-        .map((button) => Glider(
+    final buttonsJson = json['buttons'] as List<Map>;
+    final buttons = buttonsJson
+        .map<Widget>((Map button) => Glider(
               button,
               stateKey: stateKey,
             ))
@@ -425,16 +436,17 @@ class Glider extends StatelessWidget {
     Map<String, dynamic> json, {
     GlobalKey<_GliderState> stateKey,
   }) {
-    String color = _valueFromState(json, "color", stateKey);
-    double elevation = _valueFromState(json, "elevation", stateKey) ?? 1.0;
+    final color = _valueFromState(json, "color", stateKey) as String;
+    final elevation =
+        _valueFromState(json, "elevation", stateKey) as double ?? 1.0;
 
     return Card(
-      child: Glider(
-        json['child'],
-        stateKey: stateKey,
-      ),
       color: _colorFromHex(color),
       elevation: elevation,
+      child: Glider(
+        json['child'] as Map,
+        stateKey: stateKey,
+      ),
     );
   }
 
@@ -446,7 +458,7 @@ class Glider extends StatelessWidget {
     return Center(
       child: json['child'] != null
           ? Glider(
-              json['child'],
+              json['child'] as Map,
               stateKey: stateKey,
             )
           : null,
@@ -457,12 +469,12 @@ class Glider extends StatelessWidget {
     BuildContext context,
     Map<String, dynamic> json,
   ) {
-    return CircularProgressIndicator();
+    return const CircularProgressIndicator();
   }
 
   static Column _buildColumn(BuildContext context, Map<String, dynamic> json,
       {GlobalKey<_GliderState> stateKey}) {
-    final List<dynamic> childrenJson = json['children'];
+    final childrenJson = json['children'] as List<Map>;
     final List<Widget> children = childrenJson
         .map((child) => Glider(
               child,
@@ -479,7 +491,7 @@ class Glider extends StatelessWidget {
     Map<String, dynamic> json,
   ) {
     return Divider(
-      indent: json['indent'] != null ? json['indent'] : 0.0,
+      indent: json['indent'] as double ?? 0.0,
     );
   }
 
@@ -489,10 +501,11 @@ class Glider extends StatelessWidget {
     GlobalKey<_GliderState> stateKey,
   }) {
     return Drawer(
-        child: Glider(
-      json['child'],
-      stateKey: stateKey,
-    ));
+      child: Glider(
+        json['child'] as Map,
+        stateKey: stateKey,
+      ),
+    );
   }
 
   static FlatButton _buildFlatButton(
@@ -500,11 +513,11 @@ class Glider extends StatelessWidget {
     Map<String, dynamic> json, {
     GlobalKey<_GliderState> stateKey,
   }) {
-    Function onTap = _onTap(context, json, stateKey);
+    final VoidCallback onTap = _onTap(context, json, stateKey);
 
     return FlatButton(
-      child: Text(_valueFromState(json, 'text', stateKey)),
       onPressed: onTap,
+      child: Text(_valueFromState(json, 'text', stateKey) as String),
     );
   }
 
@@ -513,19 +526,19 @@ class Glider extends StatelessWidget {
     Map<String, dynamic> json, {
     GlobalKey<_GliderState> stateKey,
   }) {
-    Function onTap = _onTap(context, json, stateKey);
+    final VoidCallback onTap = _onTap(context, json, stateKey);
 
-    String icon = _valueFromState(json, 'icon', stateKey);
+    final icon = _valueFromState(json, 'icon', stateKey) as String;
 
     return json['label'] != null
         ? FloatingActionButton.extended(
             icon: _buildIcon(context, icon),
-            label: Text(_valueFromState(json, 'label', stateKey)),
+            label: Text(_valueFromState(json, 'label', stateKey) as String),
             onPressed: onTap,
           )
         : FloatingActionButton(
-            child: _buildIcon(context, icon),
             onPressed: onTap,
+            child: _buildIcon(context, icon),
           );
   }
 
@@ -537,7 +550,7 @@ class Glider extends StatelessWidget {
     return Hero(
       tag: json['tag'],
       child: Glider(
-        json['child'],
+        json['child'] as Map,
         stateKey: stateKey,
       ),
     );
@@ -548,14 +561,14 @@ class Glider extends StatelessWidget {
   }
 
   static Image _buildImage(BuildContext context, Map<String, dynamic> json) {
-    return Image.network(json['src']);
+    return Image.network(json['src'] as String);
   }
 
   static LinearProgressIndicator _buildLinearProgressIndiator(
     BuildContext context,
     Map<String, dynamic> json,
   ) {
-    return LinearProgressIndicator();
+    return const LinearProgressIndicator();
   }
 
   static ListTile _buildListTile(
@@ -563,20 +576,20 @@ class Glider extends StatelessWidget {
     Map<String, dynamic> json, {
     GlobalKey<_GliderState> stateKey,
   }) {
-    final Function onTap = _onTap(context, json, stateKey);
+    final VoidCallback onTap = _onTap(context, json, stateKey);
 
     return ListTile(
       title: json['title'] != null
-          ? Text(_valueFromState(json, 'title', stateKey))
+          ? Text(_valueFromState(json, 'title', stateKey) as String)
           : null,
       subtitle: json['subtitle'] != null
-          ? Text(_valueFromState(json, 'subtitle', stateKey))
+          ? Text(_valueFromState(json, 'subtitle', stateKey) as String)
           : null,
       leading: json['leading'] != null
-          ? Glider(_valueFromState(json, 'leading', stateKey))
+          ? Glider(_valueFromState(json, 'leading', stateKey) as Map)
           : null,
       trailing: json['trailing'] != null
-          ? Glider(_valueFromState(json, 'trailing', stateKey))
+          ? Glider(_valueFromState(json, 'trailing', stateKey) as Map)
           : null,
       onTap: onTap,
     );
@@ -587,7 +600,7 @@ class Glider extends StatelessWidget {
     Map<String, dynamic> json, {
     GlobalKey<_GliderState> stateKey,
   }) {
-    final List<dynamic> childrenJson = json['children'];
+    final childrenJson = json['children'] as List<Map>;
     final List<Widget> children = childrenJson
         .map((child) => Glider(
               child,
@@ -602,11 +615,11 @@ class Glider extends StatelessWidget {
     Map<String, dynamic> json, {
     GlobalKey<_GliderState> stateKey,
   }) {
-    Function onTap = _onTap(context, json, stateKey);
+    final VoidCallback onTap = _onTap(context, json, stateKey);
 
     return OutlineButton(
-      child: Text(_valueFromState(json, 'text', stateKey)),
       onPressed: onTap,
+      child: Text(_valueFromState(json, 'text', stateKey) as String),
     );
   }
 
@@ -616,24 +629,25 @@ class Glider extends StatelessWidget {
     GlobalKey<_GliderState> stateKey,
   }) {
     return Padding(
-        child: Glider(
-          json['child'],
-          stateKey: stateKey,
-        ),
-        padding: json['padding'] != null
-            ? EdgeInsets.all(json['padding'].toDouble())
-            : json['padding_vertical'] != null &&
-                    json['padding_horizontal'] != null
-                ? EdgeInsets.symmetric(
-                    vertical: json['padding_vertical'].toDouble(),
-                    horizontal: json['padding_horizontal'].toDouble(),
-                  )
-                : EdgeInsets.fromLTRB(
-                    json['padding_left'].toDouble(),
-                    json['padding_top'].toDouble(),
-                    json['padding_right'].toDouble(),
-                    json['padding_bottom'].toDouble(),
-                  ));
+      padding: json['padding'] != null
+          ? EdgeInsets.all(json['padding'] as double)
+          : json['padding_vertical'] != null &&
+                  json['padding_horizontal'] != null
+              ? EdgeInsets.symmetric(
+                  vertical: json['padding_vertical'] as double,
+                  horizontal: json['padding_horizontal'] as double,
+                )
+              : EdgeInsets.fromLTRB(
+                  json['padding_left'] as double,
+                  json['padding_top'] as double,
+                  json['padding_right'] as double,
+                  json['padding_bottom'] as double,
+                ),
+      child: Glider(
+        json['child'] as Map,
+        stateKey: stateKey,
+      ),
+    );
   }
 
   static RaisedButton _buildRaisedButton(
@@ -641,11 +655,11 @@ class Glider extends StatelessWidget {
     Map<String, dynamic> json, {
     GlobalKey<_GliderState> stateKey,
   }) {
-    Function onTap = _onTap(context, json, stateKey);
+    final VoidCallback onTap = _onTap(context, json, stateKey);
 
     return RaisedButton(
-      child: Text(_valueFromState(json, 'text', stateKey)),
       onPressed: onTap,
+      child: Text(_valueFromState(json, 'text', stateKey) as String),
     );
   }
 
@@ -654,7 +668,7 @@ class Glider extends StatelessWidget {
     Map<String, dynamic> json, {
     GlobalKey<_GliderState> stateKey,
   }) {
-    final List<dynamic> childrenJson = json['children'];
+    final childrenJson = json['children'] as List<Map>;
     final List<Widget> children = childrenJson
         .map((child) => Glider(
               child,
@@ -672,22 +686,25 @@ class Glider extends StatelessWidget {
     GlobalKey<_GliderState> stateKey,
   }) {
     return SizedBox(
-      width: _valueFromState(json, "width", stateKey),
-      height: _valueFromState(json, "height", stateKey),
+      width: _valueFromState(json, "width", stateKey) as double,
+      height: _valueFromState(json, "height", stateKey) as double,
       child: json['child'] != null
           ? Glider(
-              json['child'],
+              json['child'] as Map,
               stateKey: stateKey,
             )
           : null,
     );
   }
 
-  static ThemeData _buildTheme(BuildContext context, Map<String, dynamic> json,
-      {GlobalKey<_GliderState> stateKey}) {
-    String primary = _valueFromState(json, "primary_color", stateKey);
-    String accent = _valueFromState(json, "accent_color", stateKey);
-    bool dark = _valueFromState(json, "dark", stateKey);
+  static ThemeData _buildTheme(
+    BuildContext context,
+    Map<String, dynamic> json, {
+    GlobalKey<_GliderState> stateKey,
+  }) {
+    final primary = _valueFromState(json, "primary_color", stateKey) as String;
+    final accent = _valueFromState(json, "accent_color", stateKey) as String;
+    final dark = _valueFromState(json, "dark", stateKey) as bool;
 
     return ThemeData(
       primaryColor: _colorFromHex(primary),
@@ -697,8 +714,8 @@ class Glider extends StatelessWidget {
           ? InputDecorationTheme(
               filled: json['input_theme']['filled'] == true,
               border: json['input_theme']['outlined'] == true
-                  ? OutlineInputBorder()
-                  : UnderlineInputBorder(),
+                  ? const OutlineInputBorder()
+                  : const UnderlineInputBorder(),
             )
           : null,
       buttonTheme: ButtonThemeData(
@@ -714,7 +731,7 @@ class Glider extends StatelessWidget {
     Map<String, dynamic> json, {
     GlobalKey<_GliderState> stateKey,
   }) {
-    String text = _valueFromState(json, "text", stateKey);
+    final String text = _valueFromState(json, "text", stateKey) as String;
     return Text(text);
   }
 
@@ -723,12 +740,12 @@ class Glider extends StatelessWidget {
     Map<String, dynamic> json,
   ) {
     return Tooltip(
-      child: Glider(json['child']),
-      message: json['message'],
+      message: json['message'] as String,
+      child: Glider(json['child'] as Map),
     );
   }
 
-  static Function _onTap(
+  static VoidCallback _onTap(
     BuildContext context,
     Map<String, dynamic> json,
     GlobalKey<_GliderState> stateKey,
@@ -737,29 +754,40 @@ class Glider extends StatelessWidget {
       return () async {
         try {
           await CloudFunctions.instance
-              .getHttpsCallable(functionName: json['cloud_function'])
+              .getHttpsCallable(
+                functionName: json['cloud_function'] as String,
+              )
               .call();
           if (json.containsKey('destination')) {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => Glider(json['destination'])));
+            await Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (context) => Glider(json['destination'] as Map),
+              ),
+            );
           }
         } catch (e) {
-          Scaffold.of(context).showSnackBar(SnackBar(content: Text(e.message)));
+          Scaffold.of(context).showSnackBar(
+            SnackBar(content: Text(e.message as String)),
+          );
         }
       };
     } else if (json.containsKey('destination')) {
       return () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Glider(json['destination']),
-        ));
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (context) => Glider(json['destination'] as Map),
+          ),
+        );
       };
     } else if (json.containsKey('state_change') &&
         stateKey != null &&
         stateKey.currentState != null) {
       return () {
-        _GliderState currentState = stateKey.currentState;
+        final _GliderState currentState = stateKey.currentState;
         if (currentState != null) {
-          currentState.updateState(json['state_change']);
+          currentState.updateState(
+            json['state_change'] as Map<String, dynamic>,
+          );
         }
       };
     }
@@ -772,13 +800,13 @@ class Glider extends StatelessWidget {
     String fieldKey,
     GlobalKey<_GliderState> stateKey,
   ) {
-    dynamic jsonValue = json[fieldKey];
+    final dynamic jsonValue = json[fieldKey];
 
     if (stateKey != null &&
         jsonValue is Map &&
         jsonValue['type'] == 'state_value') {
-      String valueKey = jsonValue['key'];
-      _GliderState currentState = stateKey.currentState;
+      final valueKey = jsonValue['key'] as String;
+      final _GliderState currentState = stateKey.currentState;
       return currentState._state[valueKey];
     }
     return json[fieldKey];
@@ -788,9 +816,14 @@ class Glider extends StatelessWidget {
     String hex,
   ) {
     if (hex != null && hex.isNotEmpty) {
-      return Color(int.parse(hex.replaceAll('#', ''), radix: 16))
-          .withOpacity(1.0);
-    } else
+      return Color(
+        int.parse(
+          hex.replaceAll('#', ''),
+          radix: 16,
+        ),
+      ).withOpacity(1.0);
+    } else {
       return null;
+    }
   }
 }

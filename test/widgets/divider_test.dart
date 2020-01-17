@@ -4,8 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('divider test (no indent)', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Glider({
+    await tester.pumpWidget(const MaterialApp(
+      home: Glider(<String, dynamic>{
         "type": "divider",
       }),
     ));
@@ -14,8 +14,8 @@ void main() {
   });
 
   testWidgets('divider test (with indent)', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Glider({
+    await tester.pumpWidget(const MaterialApp(
+      home: Glider(<String, dynamic>{
         "type": "divider",
         "indent": 2.0,
       }),
@@ -23,7 +23,7 @@ void main() {
 
     expect(find.byType(Divider), findsOneWidget);
 
-    Divider divider = tester.widget(find.byType(Divider));
+    final Divider divider = tester.widget(find.byType(Divider));
     expect(divider.indent, equals(2.0));
   });
 }
