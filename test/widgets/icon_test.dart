@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:cocoon/cocoon.dart';
+import 'package:glider/glider.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 void main() {
   testWidgets('icon test (Material)', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
-      home: Cocoon({
+      home: Glider({
         "type": "icon",
         "icon": "person",
       }),
@@ -20,7 +20,7 @@ void main() {
 
   testWidgets('icon test (FontAwesome)', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
-      home: Cocoon({
+      home: Glider({
         "type": "icon",
         "icon": "applePay",
       }),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:icons_helper/icons_helper.dart';
-import 'cocoon.dart';
+import 'glider.dart';
 
 class BottomNavScaffold extends StatefulWidget {
   final Map<String, dynamic> _json;
@@ -32,13 +32,13 @@ class _BottomNavScaffoldState extends State<BottomNavScaffold> {
             )
           : null,
       body: _itemsJson[_currentSelection] != null
-          ? Cocoon(_itemsJson[_currentSelection]['body'])
+          ? Glider(_itemsJson[_currentSelection]['body'])
           : null,
       bottomNavigationBar: _buildNavigationBar(context),
-      floatingActionButton: _json['fab'] != null ? Cocoon(_json['fab']) : null,
-      drawer: _json['drawer'] != null ? Cocoon(_json['drawer']) : null,
+      floatingActionButton: _json['fab'] != null ? Glider(_json['fab']) : null,
+      drawer: _json['drawer'] != null ? Glider(_json['drawer']) : null,
       bottomSheet:
-          _json['bottom_sheet'] != null ? Cocoon(_json['bottom_sheet']) : null,
+          _json['bottom_sheet'] != null ? Glider(_json['bottom_sheet']) : null,
     );
   }
 

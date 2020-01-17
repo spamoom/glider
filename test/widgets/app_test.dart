@@ -1,10 +1,10 @@
-import 'package:cocoon/cocoon.dart';
+import 'package:glider/glider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('app test', (WidgetTester tester) async {
-    await tester.pumpWidget(Cocoon({
+    await tester.pumpWidget(Glider({
       "type": "app",
       "title": "Test",
       "theme": {

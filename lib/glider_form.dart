@@ -4,37 +4,34 @@ import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 
-class CocoonForm extends StatefulWidget {
+class GliderForm extends StatefulWidget {
   final Map<String, dynamic> _json;
 
-  CocoonForm(this._json, {Key key}) : super(key: key);
+  GliderForm(this._json, {Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _CocoonFormState(_json);
+    return _GliderFormState(_json);
   }
 }
 
-class _CocoonFormState extends State<CocoonForm> {
+class _GliderFormState extends State<GliderForm> {
   final _formKey = GlobalKey<FormState>();
   final Map<String, dynamic> _json;
   final Map<String, dynamic> _values = {};
   final Map<String, TextEditingController> _textControllers = {};
 
-  _CocoonFormState(this._json) {
+  _GliderFormState(this._json) {
     final fields = _json['fields'];
     fields.forEach((field) {
       final String name = field['name'];
       _values[name] = field['initial_value'];
     });
-
-    print(_values);
   }
 
   void _setValue(String name, dynamic value) {
     setState(() {
       _values[name] = value;
-      print('$name: $value');
     });
   }
 
@@ -331,11 +328,7 @@ class _CocoonFormState extends State<CocoonForm> {
           default:
             call = post(submitTo['url'], body: body, headers: headers);
         }
-        call.then((Response response) {
-          print(response.body);
-        }).catchError((error) {
-          print(error);
-        });
+        call.then((Response response) {}).catchError((error) {});
         // if (response.statusCode == 200) {
         //   // Success
         // } else {

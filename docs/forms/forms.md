@@ -1,16 +1,16 @@
-# Cocoon Forms
+# Glider Forms
 
 You can create a `form` widget like this:
 
 ```json
 {
-    "type": "form",
-    "submit_to": {
-        "url": "https://api.anapi.com/v1/posts",
-        "method": "post|put|patch"
-    },
-    "fields": [],
-    "buttons": []
+  "type": "form",
+  "submit_to": {
+    "url": "https://api.anapi.com/v1/posts",
+    "method": "post|put|patch"
+  },
+  "fields": [],
+  "buttons": []
 }
 ```
 

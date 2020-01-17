@@ -1,4 +1,4 @@
-import 'package:cocoon/cocoon.dart';
+import 'package:glider/glider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -6,7 +6,7 @@ void main() {
   testWidgets('bottom navigation tab switching test',
       (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
-      home: Cocoon({
+      home: Glider({
         "type": "bottom_nav_scaffold",
         "items": [
           {
@@ -71,7 +71,7 @@ void main() {
   testWidgets('bottom navigation scaffold app bar test',
       (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
-      home: Cocoon({
+      home: Glider({
         "type": "bottom_nav_scaffold",
         "app_bar": {
           "type": "app_bar",
@@ -106,7 +106,7 @@ void main() {
   testWidgets('bottom navigation scaffold fab test',
       (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
-      home: Cocoon({
+      home: Glider({
         "type": "bottom_nav_scaffold",
         "fab": {
           "type": "fab",
@@ -154,7 +154,7 @@ void main() {
   testWidgets('bottom navigation scaffold drawer test',
       (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
-      home: Cocoon({
+      home: Glider({
         "type": "bottom_nav_scaffold",
         "app_bar": {
           "type": "app_bar",

@@ -1,8 +1,8 @@
-/// A [Cocoon] is a [Widget] which takes a JSON definition and translates it into an app.
+/// A [Glider] is a [Widget] which takes a JSON definition and translates it into an app.
 ///
 /// The JSON definition can be passed as a [String] or as a [Map].
 /// Additionally, you can pass a URL from which to retrieve the definition.
-library cocoon;
+library glider;
 
 import 'dart:convert';
 
@@ -12,28 +12,28 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:icons_helper/icons_helper.dart';
 import 'bottom_nav_scaffold.dart';
-import 'cocoon_form.dart';
+import 'glider_form.dart';
 
 // A wrapper [Widget] containing a [GlobalKey] and state values
-class _CocoonStateful extends StatefulWidget {
-  final GlobalKey<_CocoonState> globalKey;
+class _GliderStateful extends StatefulWidget {
+  final GlobalKey<_GliderState> globalKey;
   final Map<String, dynamic> _json;
 
-  _CocoonStateful(this._json, this.globalKey) : super(key: globalKey);
+  _GliderStateful(this._json, this.globalKey) : super(key: globalKey);
 
   @override
   State<StatefulWidget> createState() {
-    return _CocoonState(globalKey, _json);
+    return _GliderState(globalKey, _json);
   }
 }
 
-class _CocoonState extends State<_CocoonStateful> {
-  final GlobalKey<_CocoonState> globalKey;
+class _GliderState extends State<_GliderStateful> {
+  final GlobalKey<_GliderState> globalKey;
   final Map<String, dynamic> _json;
   Map<String, Widget> _customWidgets = {};
   Map<String, dynamic> _state;
 
-  _CocoonState(
+  _GliderState(
     this.globalKey,
     this._json, {
     Map<String, Widget> customWidgets: const {},
@@ -50,7 +50,7 @@ class _CocoonState extends State<_CocoonStateful> {
 
   @override
   Widget build(BuildContext context) {
-    return Cocoon._buildWidget(context, _json, globalKey, _customWidgets);
+    return Glider._buildWidget(context, _json, globalKey, _customWidgets);
   }
 
   void updateStateValue(String key, dynamic value) {
@@ -69,24 +69,24 @@ class _CocoonState extends State<_CocoonStateful> {
 }
 
 /// A [Widget] based on a JSON-formatted definition.
-class Cocoon extends StatelessWidget {
+class Glider extends StatelessWidget {
   final Map _json;
-  final GlobalKey<_CocoonState> _stateKey;
+  final GlobalKey<_GliderState> _stateKey;
   final Map<String, Widget> _customWidgets;
 
-  /// Creates a [Cocoon] based on the given JSON-formatted [Map].
-  Cocoon(
+  /// Creates a [Glider] based on the given JSON-formatted [Map].
+  Glider(
     this._json, {
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
     Map<String, Widget> customWidgets: const {},
     Key key,
   })  : this._stateKey = stateKey,
         this._customWidgets = customWidgets,
         super(key: key);
 
-  /// Creates a [Cocoon] based on the given API endpoint, with an optional [fallback] parameter.
+  /// Creates a [Glider] based on the given API endpoint, with an optional [fallback] parameter.
   ///
-  /// The endpoint should return a JSON-formatted Cocoon definition.
+  /// The endpoint should return a JSON-formatted Glider definition.
   ///
   /// The [fallback] should be a JSON-formatted [String] defining the widget to display in case the endpoint can't be reached.
   ///
@@ -102,9 +102,9 @@ class Cocoon extends StatelessWidget {
       builder: (context, AsyncSnapshot<Response> snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data.statusCode == 200) {
-            return Cocoon.appFromString(snapshot.data.body);
+            return Glider.appFromString(snapshot.data.body);
           } else if (fallback != null) {
-            return Cocoon.appFromString(fallback);
+            return Glider.appFromString(fallback);
           } else {
             return MaterialApp(
               home: Center(
@@ -114,7 +114,7 @@ class Cocoon extends StatelessWidget {
                       : 'An error occurred',
                 ),
               ),
-              title: "Cocoon App",
+              title: "Glider App",
             );
           }
         } else {
@@ -122,22 +122,22 @@ class Cocoon extends StatelessWidget {
             home: Center(
               child: CircularProgressIndicator(),
             ),
-            title: "Cocoon App",
+            title: "Glider App",
           );
         }
       },
     );
   }
 
-  /// Creates a [Cocoon] based on a JSON-formatted [String] definition.
+  /// Creates a [Glider] based on a JSON-formatted [String] definition.
   static Widget appFromString(
     String json, {
     Map<String, Widget> customWidgets: const {},
   }) {
-    return Cocoon(jsonDecode(json), customWidgets: customWidgets);
+    return Glider(jsonDecode(json), customWidgets: customWidgets);
   }
 
-  /// Creates a [Cocoon] based on a definition provided by a Cloud Firestore [DocumentReference].
+  /// Creates a [Glider] based on a definition provided by a Cloud Firestore [DocumentReference].
   ///
   /// This widget will automatically update as the document is changed in Cloud Firestore.
   static Widget appFromDocumentReference(
@@ -149,7 +149,7 @@ class Cocoon extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return fallback != null
-              ? Cocoon.appFromString(fallback)
+              ? Glider.appFromString(fallback)
               : Scaffold(
                   body: Center(
                     child: Text(
@@ -164,7 +164,7 @@ class Cocoon extends StatelessWidget {
           if (json['type'] != 'app' && json['type'] != 'firestore_ref') {
             throw Exception("The definition does not define an app widget.");
           }
-          return Cocoon.appFromString(jsonEncode(json));
+          return Glider.appFromString(jsonEncode(json));
         } else {
           return Scaffold(
             body: Center(
@@ -187,7 +187,7 @@ class Cocoon extends StatelessWidget {
               throw Exception(
                   "Only Scaffold widgets can be retrieved from URLs");
             }
-            return Cocoon(json);
+            return Glider(json);
           } else {
             return Scaffold(
               body: Center(
@@ -218,7 +218,7 @@ class Cocoon extends StatelessWidget {
           return Center(child: Text("An error occurred"));
         } else if (snapshot.hasData) {
           final Map<String, dynamic> json = snapshot.data.data;
-          return Cocoon.appFromString(jsonEncode(json));
+          return Glider.appFromString(jsonEncode(json));
         } else {
           return Center(child: CircularProgressIndicator());
         }
@@ -228,11 +228,9 @@ class Cocoon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(_json);
-
-    // If this widget contains a state object, wrapp with [_CocoonStateful]
+    // If this widget contains a state object, wrap with [_GliderStateful]
     if (_json.containsKey("state")) {
-      return _CocoonStateful(_json, GlobalKey());
+      return _GliderStateful(_json, GlobalKey());
     }
 
     return _buildWidget(
@@ -246,7 +244,7 @@ class Cocoon extends StatelessWidget {
   static Widget _buildWidget(
     BuildContext context,
     Map<String, dynamic> json,
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
     Map<String, Widget> customWidgets,
   ) {
     final String type = json['type'];
@@ -255,10 +253,9 @@ class Cocoon extends StatelessWidget {
     } else {
       switch (type) {
         case 'url':
-          return Cocoon._fromUrl(json['url']);
+          return Glider._fromUrl(json['url']);
         case 'firestore_ref':
-          print(json['ref']);
-          return Cocoon._fromDocumentReference(
+          return Glider._fromDocumentReference(
               Firestore.instance.document(json['ref']));
         case 'app':
           return _buildApp(context, json, stateKey: stateKey);
@@ -289,7 +286,7 @@ class Cocoon extends StatelessWidget {
         case 'flat_button':
           return _buildFlatButton(context, json, stateKey: stateKey);
         case 'form':
-          return CocoonForm(json);
+          return GliderForm(json);
         case 'hero':
           return _buildHero(context, json, stateKey: stateKey);
         case 'icon':
@@ -324,9 +321,9 @@ class Cocoon extends StatelessWidget {
   }
 
   static MaterialApp _buildApp(BuildContext context, Map<String, dynamic> json,
-      {GlobalKey<_CocoonState> stateKey}) {
+      {GlobalKey<_GliderState> stateKey}) {
     return MaterialApp(
-      home: Cocoon(
+      home: Glider(
         json['home'],
         stateKey: stateKey,
       ),
@@ -339,38 +336,38 @@ class Cocoon extends StatelessWidget {
   static Scaffold _buildScaffold(
     BuildContext context,
     Map<String, dynamic> json, {
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
   }) {
     return Scaffold(
       appBar: json['app_bar'] != null
           ? _buildAppBar(context, json['app_bar'], stateKey: stateKey)
           : null,
       body: json['body'] != null
-          ? Cocoon(
+          ? Glider(
               json['body'],
               stateKey: stateKey,
             )
           : null,
       floatingActionButton: json['fab'] != null
-          ? Cocoon(
+          ? Glider(
               json['fab'],
               stateKey: stateKey,
             )
           : null,
       drawer: json['drawer'] != null
-          ? Cocoon(
+          ? Glider(
               json['drawer'],
               stateKey: stateKey,
             )
           : null,
       bottomNavigationBar: json['bottom_bar'] != null
-          ? Cocoon(
+          ? Glider(
               json['bottom_bar'],
               stateKey: stateKey,
             )
           : null,
       bottomSheet: json['bottom_sheet'] != null
-          ? Cocoon(
+          ? Glider(
               json['bottom_sheet'],
               stateKey: stateKey,
             )
@@ -388,7 +385,7 @@ class Cocoon extends StatelessWidget {
   static AppBar _buildAppBar(
     BuildContext context,
     Map<String, dynamic> json, {
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
   }) {
     return AppBar(
       title: Text(_valueFromState(json, "title", stateKey)),
@@ -398,22 +395,22 @@ class Cocoon extends StatelessWidget {
   static AspectRatio _buildAspectRatio(
     BuildContext context,
     Map<String, dynamic> json, {
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
   }) {
     return AspectRatio(
       aspectRatio: json['aspect_ratio'],
-      child: Cocoon(json['child'], stateKey: stateKey),
+      child: Glider(json['child'], stateKey: stateKey),
     );
   }
 
   static ButtonBar _buildButtonBar(
     BuildContext context,
     Map<String, dynamic> json, {
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
   }) {
     final List<dynamic> buttonsJson = json['buttons'];
     final List<Widget> buttons = buttonsJson
-        .map((button) => Cocoon(
+        .map((button) => Glider(
               button,
               stateKey: stateKey,
             ))
@@ -426,13 +423,13 @@ class Cocoon extends StatelessWidget {
   static Card _buildCard(
     BuildContext context,
     Map<String, dynamic> json, {
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
   }) {
     String color = _valueFromState(json, "color", stateKey);
     double elevation = _valueFromState(json, "elevation", stateKey) ?? 1.0;
 
     return Card(
-      child: Cocoon(
+      child: Glider(
         json['child'],
         stateKey: stateKey,
       ),
@@ -444,11 +441,11 @@ class Cocoon extends StatelessWidget {
   static Center _buildCenter(
     BuildContext context,
     Map<String, dynamic> json, {
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
   }) {
     return Center(
       child: json['child'] != null
-          ? Cocoon(
+          ? Glider(
               json['child'],
               stateKey: stateKey,
             )
@@ -464,10 +461,10 @@ class Cocoon extends StatelessWidget {
   }
 
   static Column _buildColumn(BuildContext context, Map<String, dynamic> json,
-      {GlobalKey<_CocoonState> stateKey}) {
+      {GlobalKey<_GliderState> stateKey}) {
     final List<dynamic> childrenJson = json['children'];
     final List<Widget> children = childrenJson
-        .map((child) => Cocoon(
+        .map((child) => Glider(
               child,
               stateKey: stateKey,
             ))
@@ -489,10 +486,10 @@ class Cocoon extends StatelessWidget {
   static Drawer _buildDrawer(
     BuildContext context,
     Map<String, dynamic> json, {
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
   }) {
     return Drawer(
-        child: Cocoon(
+        child: Glider(
       json['child'],
       stateKey: stateKey,
     ));
@@ -501,7 +498,7 @@ class Cocoon extends StatelessWidget {
   static FlatButton _buildFlatButton(
     BuildContext context,
     Map<String, dynamic> json, {
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
   }) {
     Function onTap = _onTap(context, json, stateKey);
 
@@ -514,7 +511,7 @@ class Cocoon extends StatelessWidget {
   static FloatingActionButton _buildFab(
     BuildContext context,
     Map<String, dynamic> json, {
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
   }) {
     Function onTap = _onTap(context, json, stateKey);
 
@@ -535,11 +532,11 @@ class Cocoon extends StatelessWidget {
   static Hero _buildHero(
     BuildContext context,
     Map<String, dynamic> json, {
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
   }) {
     return Hero(
       tag: json['tag'],
-      child: Cocoon(
+      child: Glider(
         json['child'],
         stateKey: stateKey,
       ),
@@ -564,7 +561,7 @@ class Cocoon extends StatelessWidget {
   static ListTile _buildListTile(
     BuildContext context,
     Map<String, dynamic> json, {
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
   }) {
     final Function onTap = _onTap(context, json, stateKey);
 
@@ -576,10 +573,10 @@ class Cocoon extends StatelessWidget {
           ? Text(_valueFromState(json, 'subtitle', stateKey))
           : null,
       leading: json['leading'] != null
-          ? Cocoon(_valueFromState(json, 'leading', stateKey))
+          ? Glider(_valueFromState(json, 'leading', stateKey))
           : null,
       trailing: json['trailing'] != null
-          ? Cocoon(_valueFromState(json, 'trailing', stateKey))
+          ? Glider(_valueFromState(json, 'trailing', stateKey))
           : null,
       onTap: onTap,
     );
@@ -588,11 +585,11 @@ class Cocoon extends StatelessWidget {
   static ListView _buildListView(
     BuildContext context,
     Map<String, dynamic> json, {
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
   }) {
     final List<dynamic> childrenJson = json['children'];
     final List<Widget> children = childrenJson
-        .map((child) => Cocoon(
+        .map((child) => Glider(
               child,
               stateKey: stateKey,
             ))
@@ -603,7 +600,7 @@ class Cocoon extends StatelessWidget {
   static OutlineButton _buildOutlineButton(
     BuildContext context,
     Map<String, dynamic> json, {
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
   }) {
     Function onTap = _onTap(context, json, stateKey);
 
@@ -616,10 +613,10 @@ class Cocoon extends StatelessWidget {
   static Padding _buildPadding(
     BuildContext context,
     Map<String, dynamic> json, {
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
   }) {
     return Padding(
-        child: Cocoon(
+        child: Glider(
           json['child'],
           stateKey: stateKey,
         ),
@@ -642,7 +639,7 @@ class Cocoon extends StatelessWidget {
   static RaisedButton _buildRaisedButton(
     BuildContext context,
     Map<String, dynamic> json, {
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
   }) {
     Function onTap = _onTap(context, json, stateKey);
 
@@ -655,11 +652,11 @@ class Cocoon extends StatelessWidget {
   static Row _buildRow(
     BuildContext context,
     Map<String, dynamic> json, {
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
   }) {
     final List<dynamic> childrenJson = json['children'];
     final List<Widget> children = childrenJson
-        .map((child) => Cocoon(
+        .map((child) => Glider(
               child,
               stateKey: stateKey,
             ))
@@ -672,13 +669,13 @@ class Cocoon extends StatelessWidget {
   static SizedBox _buildSizedBox(
     BuildContext context,
     Map<String, dynamic> json, {
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
   }) {
     return SizedBox(
       width: _valueFromState(json, "width", stateKey),
       height: _valueFromState(json, "height", stateKey),
       child: json['child'] != null
-          ? Cocoon(
+          ? Glider(
               json['child'],
               stateKey: stateKey,
             )
@@ -687,7 +684,7 @@ class Cocoon extends StatelessWidget {
   }
 
   static ThemeData _buildTheme(BuildContext context, Map<String, dynamic> json,
-      {GlobalKey<_CocoonState> stateKey}) {
+      {GlobalKey<_GliderState> stateKey}) {
     String primary = _valueFromState(json, "primary_color", stateKey);
     String accent = _valueFromState(json, "accent_color", stateKey);
     bool dark = _valueFromState(json, "dark", stateKey);
@@ -715,7 +712,7 @@ class Cocoon extends StatelessWidget {
   static Text _buildText(
     BuildContext context,
     Map<String, dynamic> json, {
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
   }) {
     String text = _valueFromState(json, "text", stateKey);
     return Text(text);
@@ -726,7 +723,7 @@ class Cocoon extends StatelessWidget {
     Map<String, dynamic> json,
   ) {
     return Tooltip(
-      child: Cocoon(json['child']),
+      child: Glider(json['child']),
       message: json['message'],
     );
   }
@@ -734,7 +731,7 @@ class Cocoon extends StatelessWidget {
   static Function _onTap(
     BuildContext context,
     Map<String, dynamic> json,
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
   ) {
     if (json.containsKey('cloud_function')) {
       return () async {
@@ -744,7 +741,7 @@ class Cocoon extends StatelessWidget {
               .call();
           if (json.containsKey('destination')) {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => Cocoon(json['destination'])));
+                builder: (context) => Glider(json['destination'])));
           }
         } catch (e) {
           Scaffold.of(context).showSnackBar(SnackBar(content: Text(e.message)));
@@ -753,14 +750,14 @@ class Cocoon extends StatelessWidget {
     } else if (json.containsKey('destination')) {
       return () {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Cocoon(json['destination']),
+          builder: (context) => Glider(json['destination']),
         ));
       };
     } else if (json.containsKey('state_change') &&
         stateKey != null &&
         stateKey.currentState != null) {
       return () {
-        _CocoonState currentState = stateKey.currentState;
+        _GliderState currentState = stateKey.currentState;
         if (currentState != null) {
           currentState.updateState(json['state_change']);
         }
@@ -773,7 +770,7 @@ class Cocoon extends StatelessWidget {
   static dynamic _valueFromState(
     Map<String, dynamic> json,
     String fieldKey,
-    GlobalKey<_CocoonState> stateKey,
+    GlobalKey<_GliderState> stateKey,
   ) {
     dynamic jsonValue = json[fieldKey];
 
@@ -781,7 +778,7 @@ class Cocoon extends StatelessWidget {
         jsonValue is Map &&
         jsonValue['type'] == 'state_value') {
       String valueKey = jsonValue['key'];
-      _CocoonState currentState = stateKey.currentState;
+      _GliderState currentState = stateKey.currentState;
       return currentState._state[valueKey];
     }
     return json[fieldKey];

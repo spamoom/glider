@@ -1,11 +1,11 @@
-import 'package:cocoon/cocoon.dart';
+import 'package:glider/glider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('scaffold app bar test', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
-      home: Cocoon({
+      home: Glider({
         "type": "scaffold",
         "app_bar": {
           "type": "app_bar",
@@ -21,7 +21,7 @@ void main() {
 
   testWidgets('scaffold fab test', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
-      home: Cocoon({
+      home: Glider({
         "type": "scaffold",
         "fab": {
           "type": "fab",
@@ -50,7 +50,7 @@ void main() {
 
   testWidgets('scaffold drawer test', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
-      home: Cocoon({
+      home: Glider({
         "type": "scaffold",
         "app_bar": {
           "type": "app_bar",

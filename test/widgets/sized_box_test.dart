@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
-import 'package:cocoon/cocoon.dart';
+import 'package:glider/glider.dart';
 
 void main() {
   testWidgets('sized box test (childless)', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
-      home: Cocoon({
+      home: Glider({
         "type": "sized_box",
         "height": 16.0,
         "width": 8.0,
@@ -21,7 +21,7 @@ void main() {
 
   testWidgets('sized box test (with child)', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
-      home: Cocoon({
+      home: Glider({
         "type": "sized_box",
         "height": 16.0,
         "width": 8.0,

@@ -1,8 +1,6 @@
-# Cocoon
+# Glider
 
-[![Build Status](https://travis-ci.com/netsells/cocoon.svg?token=DiqKJJ5WUURHNCgsBBXw&branch=develop)](https://travis-ci.com/netsells/cocoon)
-
-Create a Flutter app based on a JSON API
+Server-side rendering for mobile apps, powered by Flutter.
 
 ## [Documentation](docs/README.md)
 

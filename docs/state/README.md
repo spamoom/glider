@@ -1,4 +1,4 @@
-# Cocoon State
+# Glider State
 
-* [Widget State](state.md)
-* [State Change](state_change.md)
+- [Widget State](state.md)
+- [State Change](state_change.md)

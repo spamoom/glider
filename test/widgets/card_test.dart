@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:cocoon/cocoon.dart';
+import 'package:glider/glider.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('card test', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
-      home: Cocoon({
+      home: Glider({
         "type": "card",
         "elevation": 2.0,
         "child": {

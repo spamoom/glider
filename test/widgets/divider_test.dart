@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:cocoon/cocoon.dart';
+import 'package:glider/glider.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('divider test (no indent)', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
-      home: Cocoon({
+      home: Glider({
         "type": "divider",
       }),
     ));
@@ -15,7 +15,7 @@ void main() {
 
   testWidgets('divider test (with indent)', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
-      home: Cocoon({
+      home: Glider({
         "type": "divider",
         "indent": 2.0,
       }),

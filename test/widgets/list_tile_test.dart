@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
-import 'package:cocoon/cocoon.dart';
+import 'package:glider/glider.dart';
 
 void main() {
   testWidgets('test list tile (all properties)', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
-      home: Cocoon({
+      home: Glider({
         "type": "scaffold",
         "body": {
           "type": "list_tile",
@@ -64,7 +64,7 @@ void main() {
   testWidgets('test list tile (only title and destination)',
       (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
-      home: Cocoon({
+      home: Glider({
         "type": "scaffold",
         "body": {
           "type": "list_tile",
