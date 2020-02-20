@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
-import 'package:cocoon/cocoon.dart';
+import 'package:glider/glider.dart';
 
 void main() {
   testWidgets('sized box test (childless)', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Cocoon({
+    await tester.pumpWidget(const MaterialApp(
+      home: Glider(<String, dynamic>{
         "type": "sized_box",
         "height": 16.0,
         "width": 8.0,
@@ -13,15 +13,15 @@ void main() {
     ));
 
     expect(find.byType(SizedBox), findsOneWidget);
-    SizedBox box = tester.widget(find.byType(SizedBox));
+    final SizedBox box = tester.widget(find.byType(SizedBox));
     expect(box.height, equals(16.0));
     expect(box.width, equals(8.0));
     expect(box.child, isNull);
   });
 
   testWidgets('sized box test (with child)', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Cocoon({
+    await tester.pumpWidget(const MaterialApp(
+      home: Glider(<String, dynamic>{
         "type": "sized_box",
         "height": 16.0,
         "width": 8.0,
@@ -33,7 +33,7 @@ void main() {
     ));
 
     expect(find.byType(SizedBox), findsOneWidget);
-    SizedBox box = tester.widget(find.byType(SizedBox));
+    final SizedBox box = tester.widget(find.byType(SizedBox));
     expect(box.height, equals(16.0));
     expect(box.width, equals(8.0));
     expect(

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:cocoon/cocoon.dart';
+import 'package:glider/glider.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('card test', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Cocoon({
+    await tester.pumpWidget(const MaterialApp(
+      home: Glider(<String, dynamic>{
         "type": "card",
         "elevation": 2.0,
         "child": {
@@ -15,7 +15,7 @@ void main() {
       }),
     ));
 
-    Card card = tester.widget(find.byType(Card));
+    final Card card = tester.widget(find.byType(Card));
 
     expect(card.elevation, equals(2.0));
     expect(

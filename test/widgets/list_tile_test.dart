@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
-import 'package:cocoon/cocoon.dart';
+import 'package:glider/glider.dart';
 
 void main() {
   testWidgets('test list tile (all properties)', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Cocoon({
+    await tester.pumpWidget(const MaterialApp(
+      home: Glider(<String, dynamic>{
         "type": "scaffold",
         "body": {
           "type": "list_tile",
@@ -31,11 +31,11 @@ void main() {
     ));
 
     expect(find.byType(ListTile), findsOneWidget);
-    ListTile tile = tester.widget(find.byType(ListTile));
-    Text title = tile.title;
-    Text subtitle = tile.subtitle;
-    Widget leading = tile.leading;
-    Widget trailing = tile.trailing;
+    final ListTile tile = tester.widget(find.byType(ListTile));
+    final Text title = tile.title as Text;
+    final Text subtitle = tile.subtitle as Text;
+    final Widget leading = tile.leading;
+    final Widget trailing = tile.trailing;
     expect(title.data, equals("John Smith"));
     expect(subtitle.data, equals("john@smith.com"));
     expect(
@@ -63,8 +63,8 @@ void main() {
 
   testWidgets('test list tile (only title and destination)',
       (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Cocoon({
+    await tester.pumpWidget(const MaterialApp(
+      home: Glider(<String, dynamic>{
         "type": "scaffold",
         "body": {
           "type": "list_tile",
@@ -81,8 +81,8 @@ void main() {
     ));
 
     expect(find.byType(ListTile), findsOneWidget);
-    ListTile tile = tester.widget(find.byType(ListTile));
-    Text title = tile.title;
+    final ListTile tile = tester.widget(find.byType(ListTile));
+    final Text title = tile.title as Text;
     expect(title.data, "John Smith");
 
     await tester.tap(find.byWidget(tile));

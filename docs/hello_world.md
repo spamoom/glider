@@ -1,16 +1,16 @@
-# Building your first Cocoon
+# Building your first Glider
 
 The first step is to create a new Flutter project, then replace the contents of `main.dart` with the following:
 
 ```dart
-import 'package:cocoon/cocoon.dart';
+import 'package:glider/glider.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
-String _myCocoonDef = '''
+String _myGliderDef = '''
 {
     "type": "app",
-    "title": "My First Cocoon",
+    "title": "My First Glider",
     "theme": {
         "primary_color": "#2196F3",
         "accent_color": "#CDDC39",
@@ -34,13 +34,13 @@ String _myCocoonDef = '''
 '''
 
 void main() {
-    runApp(_MyFirstCocoon());
+    runApp(_MyFirstGlider());
 }
 
-class _MyFirstCocoon extends StatelessWidget {
+class _MyFirstGlider extends StatelessWidget {
     @override
     Widget build(BuildContext context) {
-        return Cocoon(jsonDecode(_myCocoonDev));
+        return Glider(jsonDecode(_myGliderDev));
     }
 }
 ```
@@ -49,6 +49,6 @@ Run the app, and with any luck this should appear on your device or emulator:
 
 <img src="hello_world_screen1.png" height="400">
 
-Congratulations! You've built your first Cocoon.
+Congratulations! You've built your first Glider.
 
 **Next: [Widgets](widgets.md)**
